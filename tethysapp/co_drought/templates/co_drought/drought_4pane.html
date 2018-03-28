@@ -1,0 +1,21 @@
+{% extends "co_drought/base.html" %}
+{% load tethys_gizmos staticfiles %}
+
+{% block app_content %}
+    <div id="map1" class="half-map"></div>
+    <div id="map2" class="half-map"></div>
+	<div id="map3" class="half-map"></div>
+	<div id="map4" class="half-map"></div>
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <!-- <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css"> -->
+    <link href="{% static 'co_drought/css/map_4pane.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
+  <script src="{% static 'co_drought/js/map_4pane.js' %}" type="text/javascript"></script>
+{% endblock %}

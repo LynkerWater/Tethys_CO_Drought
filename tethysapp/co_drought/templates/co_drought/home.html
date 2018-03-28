@@ -1,0 +1,15 @@
+{% extends "co_drought/base.html" %}
+{% load tethys_gizmos staticfiles %}
+
+{% block app_content %}
+  {% gizmo map_view_options %}
+{% endblock %}
+
+{% block app_actions %}
+  {% gizmo add_dam_button %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link href="{% static 'co_drought/css/map.css' %}" rel="stylesheet"/>
+{% endblock %}
