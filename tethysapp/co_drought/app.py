@@ -9,12 +9,12 @@ class DamInventory(TethysAppBase):
     """
 
     name = 'Colorado Drought Monitoring Tool - Beta'
-    index = 'co_drought:home'
+    index = 'co_drought:drought'
     icon = 'co_drought/images/drought_logo.png'
     package = 'co_drought'
     root_url = 'co-drought'
     color = '#0063bf'
-    description = 'Ryan testing drought monitoring tool'
+    description = 'Lynker prototype drought monitoring tool for Colorado Drought Plan'
     tags = ''
     enable_feedback = False
     feedback_emails = []
@@ -26,11 +26,6 @@ class DamInventory(TethysAppBase):
         UrlMap = url_map_maker(self.root_url)
 
         url_maps = (
-            UrlMap(
-                name='home',
-                url='co-drought',
-                controller='co_drought.controllers.home'
-            ),
             UrlMap(
                 name='drought',
                 url='co-drought/drought',
