@@ -2,9 +2,18 @@ from django.shortcuts import render, reverse, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from tethys_sdk.gizmos import MapView, Button, ToggleSwitch, TextInput, DatePicker, SelectInput, DataTableView, MVDraw, MVLegendClass, MVLegendGeoServerImageClass, MVLegendImageClass, MVView, MVLayer, EMView, EMLayer, ESRIMap 
-
+import datetime
 from .model import add_new_dam, get_all_dams
 
+today = datetime.datetime.now()
+yearnow = today.year
+monthnow = today.month
+prevmonth = (today.replace(day=1) - datetime.timedelta(days=1)).month
+if len(str(prevmonth)) == 1:
+    prevmonth = '0' + str(prevmonth)
+if len(str(monthnow)) == 1:
+    monthnow = '0' + str(monthnow)
+        
 ############################## Drought Map Main ############################################
 @login_required()
 def drought_map(request):
@@ -34,10 +43,9 @@ def drought_map(request):
                              image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
     usdm_current = MVLayer(
             source='ImageWMS',
-            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&',
-                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png'},
-                   'serverType': 'geoserver'},
-            layer_options={'opacity':0.5},
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':True,'opacity':0.25},
             legend_title='USDM',
             legend_classes=[usdm_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
@@ -62,44 +70,7 @@ def drought_map(request):
             legend_classes=[ww_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
 
-    prec7_legend = MVLegendImageClass(value='7-day Precip Total',
-                         image_url='https://vegdri.cr.usgs.gov/wms.php?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&LAYER=PRECIP_TP7')   
-    precip7day = MVLayer(
-            source='ImageWMS',
-            options={'url': 'https://vegdri.cr.usgs.gov/wms.php?', 
-                     'params': {'LAYERS': 'PRECIP_TP7'},
-                   'serverType': 'geoserver'},
-            layer_options={'visible':False,'opacity':0.5},
-            legend_title='7-day Precip',
-            legend_classes=[prec7_legend],
-            legend_extent=[-126, 24.5, -66.2, 49])
-            
-    vdri_legend = MVLegendImageClass(value='VegDRI Cat',
-                     image_url='https://vegdri.cr.usgs.gov/wms.php?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&LAYER=DROUGHT_VDRI_EMODIS_1')   
-    vegdri = MVLayer(
-            source='ImageWMS',
-            options={'url': 'https://vegdri.cr.usgs.gov/wms.php?',
-                     'params': {'LAYERS': 'DROUGHT_VDRI_EMODIS_1'},
-                   'serverType': 'geoserver'},
-            layer_options={'visible':False,'opacity':0.5},
-            legend_title='VegDRI',
-            legend_classes=[vdri_legend],
-            legend_extent=[-126, 24.5, -66.2, 49])
-            # historical layers https://edcintl.cr.usgs.gov/geoserver/qdrivegdriemodis/wms?', 'params': {'LAYERS': 'qdrivegdriemodis_pd_1-sevenday-53-2017_mm_data'
-
-    qdri_legend = MVLegendImageClass(value='QuickDRI Cat',
-                     image_url='https://vegdri.cr.usgs.gov/wms.php?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&LAYER=DROUGHT_QDRI_EMODIS_1')   
-    quickdri = MVLayer(
-            source='ImageWMS',
-            options={'url': 'https://vegdri.cr.usgs.gov/wms.php?',
-                     'params': {'LAYERS': 'DROUGHT_QDRI_EMODIS_1'},
-                   'serverType': 'geoserver'},
-            layer_options={'visible':False,'opacity':0.5},
-            legend_title='QuickDRI',
-            legend_classes=[qdri_legend],
-            legend_extent=[-126, 24.5, -66.2, 49])
-            # historical layers: https://edcintl.cr.usgs.gov/geoserver/qdriquickdriraster/wms?', 'params': {'LAYERS': 'qdriquickdriraster_pd_1-sevenday-53-2017_mm_data'
-    
+   
     # USGS Rest server for HUC watersheds        
     watersheds = MVLayer(
         source='TileArcGISRest',
@@ -139,7 +110,7 @@ def drought_map(request):
         options={'url': 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/NOHRSC_Snow_Analysis/MapServer',
                 'params': {'LAYERS': 'show:7'}},
         legend_title='SNODAS Model SWE (in)',
-        layer_options={'visible':True,'opacity':0.7},
+        layer_options={'visible':False,'opacity':0.7},
         legend_extent=[-112, 36.3, -98.5, 41.66])
 
     # NOAA Rest server for NWM soil moisture
@@ -168,7 +139,7 @@ def drought_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,nwm_stream,nwm_stream_anom,nwm_soil,snodas_swe,water_watch,SWSI_kml,usdm_kml,watersheds],
+            layers=[tiger_boundaries,nwm_stream,nwm_stream_anom,nwm_soil,snodas_swe,water_watch,SWSI_kml,usdm_current,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -377,6 +348,15 @@ def drought_map_outlook(request):
             MVLegendClass('polygon', 'Severe Drought', fill='rgba(207,181,151,0.7)')],
         legend_extent=[-112, 36.3, -98.5, 41.66])
 
+    # NOAA WPC QPF forecast
+    WPC_5day_QPF = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/wpc_qpf/MapServer',
+                'params': {'LAYERS': 'show:10'}},
+        legend_title='WPC 5-day QPF',
+        layer_options={'visible':True,'opacity':0.5},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+
     # Define map view options
     drought_outlook_map_view_options = MapView(
             height='630px',
@@ -384,7 +364,7 @@ def drought_map_outlook(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-112, 36.3, -98.5, 41.66]}}],
-            layers=[tiger_boundaries,water_watch,ncep_month_outlook,ncep_seas_outlook,cpc_37_outlook,watersheds],
+            layers=[tiger_boundaries,water_watch,ncep_month_outlook,ncep_seas_outlook,WPC_5day_QPF,cpc_37_outlook,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -442,9 +422,8 @@ def drought_index_map(request):
                              image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
     usdm_current = MVLayer(
             source='ImageWMS',
-            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&',
-                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png'},
-                   'serverType': 'geoserver'},
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
             layer_options={'opacity':0.5},
             legend_title='USDM',
             legend_classes=[usdm_legend],
@@ -455,35 +434,10 @@ def drought_index_map(request):
         options={'url': '/static/tethys_gizmos/data/usdm_current.kml'},
         layer_options={'visible':True,'opacity':0.5},
         legend_title='USDM',
+        feature_selection=False,
         legend_classes=[usdm_legend],
         legend_extent=[-126, 24.5, -66.2, 49])
             
-    vdri_legend = MVLegendImageClass(value='VegDRI Cat',
-                     image_url='https://vegdri.cr.usgs.gov/wms.php?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&LAYER=DROUGHT_VDRI_EMODIS_1')   
-    vegdri = MVLayer(
-            source='ImageWMS',
-            options={'url': 'https://vegdri.cr.usgs.gov/wms.php?',
-                     'params': {'LAYERS': 'DROUGHT_VDRI_EMODIS_1'},
-                   'serverType': 'geoserver'},
-            layer_options={'visible':False,'opacity':0.5},
-            legend_title='VegDRI',
-            legend_classes=[vdri_legend],
-            legend_extent=[-126, 24.5, -66.2, 49])
-            # historical layers https://edcintl.cr.usgs.gov/geoserver/qdrivegdriemodis/wms?', 'params': {'LAYERS': 'qdrivegdriemodis_pd_1-sevenday-53-2017_mm_data'
-
-    qdri_legend = MVLegendImageClass(value='QuickDRI Cat',
-                     image_url='https://vegdri.cr.usgs.gov/wms.php?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&LAYER=DROUGHT_QDRI_EMODIS_1')   
-    quickdri = MVLayer(
-            source='ImageWMS',
-            options={'url': 'https://vegdri.cr.usgs.gov/wms.php?',
-                     'params': {'LAYERS': 'DROUGHT_QDRI_EMODIS_1'},
-                   'serverType': 'geoserver'},
-            layer_options={'visible':False,'opacity':0.5},
-            legend_title='QuickDRI',
-            legend_classes=[qdri_legend],
-            legend_extent=[-126, 24.5, -66.2, 49])
-            # historical layers: https://edcintl.cr.usgs.gov/geoserver/qdriquickdriraster/wms?', 'params': {'LAYERS': 'qdriquickdriraster_pd_1-sevenday-53-2017_mm_data'
-
     # ESI Data from USDA
     esi_2 = MVLayer(
             source='ImageWMS',
@@ -517,9 +471,9 @@ def drought_index_map(request):
     ncdc_pdsi = MVLayer(
         source='TileArcGISRest',
         options={'url': 'https://gis.ncdc.noaa.gov/arcgis/rest/services/cdo/indices/MapServer',
-                'params': {'LAYERS': 'show:2','layerDefs':'{"2":"YEARMONTH=201712"}'}},
+                'params': {'LAYERS': 'show:2','layerDefs':'{"2":"YEARMONTH='+str(yearnow)+str(prevmonth)+'"}'}},
         legend_title='PDSI',
-        layer_options={'visible':True,'opacity':0.7},
+        layer_options={'visible':False,'opacity':0.7},
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
     # NCDC/NIDIS palmer drought severity index
@@ -527,7 +481,7 @@ def drought_index_map(request):
     ncdc_palmz = MVLayer(
         source='TileArcGISRest',
         options={'url': 'https://gis.ncdc.noaa.gov/arcgis/rest/services/cdo/indices/MapServer',
-                'params': {'LAYERS': 'show:8','layerDefs':'{"8":"YEARMONTH=201712"}'}},
+                'params': {'LAYERS': 'show:8','layerDefs':'{"8":"YEARMONTH='+str(yearnow)+str(prevmonth)+'"}'}},
         legend_title='Palmer Z',
         layer_options={'visible':False,'opacity':0.7},
         legend_extent=[-112, 36.3, -98.5, 41.66])
@@ -536,7 +490,7 @@ def drought_index_map(request):
     ncdc_spi_1 = MVLayer(
         source='TileArcGISRest',
         options={'url': 'https://gis.ncdc.noaa.gov/arcgis/rest/services/cdo/indices/MapServer',
-                'params': {'LAYERS': 'show:11','layerDefs':'{"11":"YEARMONTH=201712"}'}},
+                'params': {'LAYERS': 'show:11','layerDefs':'{"11":"YEARMONTH='+str(yearnow)+str(prevmonth)+'"}'}},
         legend_title='SPI (1-month)',
         layer_options={'visible':False,'opacity':0.6},
         legend_extent=[-112, 36.3, -98.5, 41.66])
@@ -545,7 +499,7 @@ def drought_index_map(request):
     ncdc_spi_3 = MVLayer(
         source='TileArcGISRest',
         options={'url': 'https://gis.ncdc.noaa.gov/arcgis/rest/services/cdo/indices/MapServer',
-                'params': {'LAYERS': 'show:13','layerDefs':'{"13":"YEARMONTH=201712"}'}},
+                'params': {'LAYERS': 'show:13','layerDefs':'{"13":"YEARMONTH='+str(yearnow)+str(prevmonth)+'"}'}},
         legend_title='SPI (3-month)',
         layer_options={'visible':False,'opacity':0.6},
         legend_extent=[-112, 36.3, -98.5, 41.66])
@@ -554,7 +508,7 @@ def drought_index_map(request):
     ncdc_spi_6 = MVLayer(
         source='TileArcGISRest',
         options={'url': 'https://gis.ncdc.noaa.gov/arcgis/rest/services/cdo/indices/MapServer',
-                'params': {'LAYERS': 'show:14','layerDefs':'{"14":"YEARMONTH=201712"}'}},
+                'params': {'LAYERS': 'show:14','layerDefs':'{"14":"YEARMONTH='+str(yearnow)+str(prevmonth)+'"}'}},
         legend_title='SPI (6-month)',
         layer_options={'visible':False,'opacity':0.6},
         legend_extent=[-112, 36.3, -98.5, 41.66])
@@ -562,12 +516,12 @@ def drought_index_map(request):
         
     # Define map view options
     drought_index_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-112, 36.3, -98.5, 41.66]}}],
-            layers=[tiger_boundaries,climo_divs,ncdc_pdsi,ncdc_palmz,ncdc_spi_1,ncdc_spi_3,ncdc_spi_6,SWSI_kml,usdm_kml,watersheds],
+            layers=[tiger_boundaries,climo_divs,usdm_current,ncdc_pdsi,ncdc_palmz,ncdc_spi_1,ncdc_spi_3,ncdc_spi_6,SWSI_kml,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -647,12 +601,12 @@ def drought_veg_index_map(request):
             legend_extent=[-126, 24.5, -66.2, 49])
             # historical layers: https://edcintl.cr.usgs.gov/geoserver/qdriquickdriraster/wms?', 'params': {'LAYERS': 'qdriquickdriraster_pd_1-sevenday-53-2017_mm_data'   
     
-    #     
+    # Land Cover REST layer
+    #https://www.mrlc.gov/arcgis/rest/services/LandCover/USGS_EROS_LandCover_NLCD/MapServer
     NLCD = MVLayer(
-            source='ImageWCS',
-            options={'url': 'https://www.mrlc.gov/arcgis/services/LandCover/USGS_EROS_LandCover_NLCD/MapServer/WCSServer?',
-                     'params': {'LAYERS': 'Land_Cover_2011_CONUS'},
-                   'serverType': 'mapserver'},
+            source='TileArcGISRest',
+            options={'url': 'https://www.mrlc.gov/arcgis/rest/services/LandCover/USGS_EROS_LandCover_NLCD/MapServer',
+                     'params': {'LAYERS': 'show6'}},
             layer_options={'visible':False,'opacity':0.5},
             legend_title='NLCD',
             legend_extent=[-126, 24.5, -66.2, 49])
@@ -715,7 +669,7 @@ def drought_prec_map(request):
             options={'url': 'https://vegdri.cr.usgs.gov/wms.php?',
                      'params': {'LAYERS': 'PRECIP_TP7'},
                    'serverType': 'geoserver'},
-            layer_options={'visible':False,'opacity':0.5},
+            layer_options={'visible':True,'opacity':0.5},
             legend_title='7-day Precip',
             legend_classes=[prec7_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
@@ -740,15 +694,6 @@ def drought_prec_map(request):
             MVLegendClass('polygon', '30', fill='rgba(189,115,144,0.7)'),
             MVLegendClass('polygon', '39', fill='rgba(195,142,150,0.7)'),
             MVLegendClass('polygon', '79', fill='rgba(179,158,153,0.7)')],
-        legend_extent=[-112, 36.3, -98.5, 41.66])
-    
-    # NOAA WPC QPF forecast
-    WPC_5day_QPF = MVLayer(
-        source='TileArcGISRest',
-        options={'url': 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/wpc_qpf/MapServer',
-                'params': {'LAYERS': 'show:10'}},
-        legend_title='WPC 5-day QPF',
-        layer_options={'visible':True,'opacity':0.5},
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
     # Coloado CDSS snowpack data (requires token --- expires)
@@ -775,7 +720,7 @@ def drought_prec_map(request):
             controls=['ZoomSlider', 'Rotate', 'FullScreen', 'ScaleLine', 'WMSLegend',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-112, 36.3, -98.5, 41.66]}}],
-            layers=[tiger_boundaries,snodas_swe,precip7day,WPC_5day_QPF,watersheds],
+            layers=[tiger_boundaries,snodas_swe,precip7day,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True

@@ -40,7 +40,7 @@ $(function()
                 popup.setPosition(coordinates);
 
                 $(popup_element).popover({
-                  'placement': 'top',
+                  'placement': 'bottom',
                   'animation': true,
                   'html': true,
                   'content': popup_content
