@@ -1,0 +1,17 @@
+{% extends "co_drought/base.html" %}
+{% load tethys_gizmos staticfiles %}
+
+{% block app_content %}
+  {% gizmo drought_vuln_map_view_options %}
+  <div id="popup"></div>
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link href="{% static 'co_drought/css/map_cocorahs.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'co_drought/js/map_cocorahs.js' %}" type="text/javascript"></script>
+{% endblock %}

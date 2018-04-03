@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from tethys_sdk.gizmos import MapView, Button, ToggleSwitch, TextInput, DatePicker, SelectInput, DataTableView, MVDraw, MVLegendClass, MVLegendGeoServerImageClass, MVLegendImageClass, MVView, MVLayer, EMView, EMLayer, ESRIMap 
 import datetime
+import json
 from .model import add_new_dam, get_all_dams
 
 today = datetime.datetime.now()
@@ -65,7 +66,7 @@ def drought_map(request):
             options={'url': 'https://edcintl.cr.usgs.gov/geoserver/qdriwaterwatchshapefile/wms?',
                      'params': {'LAYERS': 'water_watch_today'},
                    'serverType': 'geoserver'},
-            layer_options={'opacity':0.5},
+            layer_options={'visible':False,'opacity':0.5},
             legend_title='USGS Water Watch',
             legend_classes=[ww_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
@@ -124,6 +125,35 @@ def drought_map(request):
         legend_classes=[nwm_soil_legend],
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
+    # Define GeoJSON layer
+    geojson_object = {
+        'type': 'FeatureCollection',
+        'crs': {
+            'type': 'name',
+            'properties': {
+                'name': 'EPSG:4326'
+            }
+        },
+        'features': [
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-105.000,40.0000]
+                }
+            }]}
+    with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
+        data = json.load(f)
+        
+    coco_geojson = MVLayer(
+        source='GeoJSON',
+        options=data,
+        legend_title='Test GeoJSON',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=True,
+        legend_classes=[MVLegendClass('point', 'point', fill='#d84e1f')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#d84e1f'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+        
 #    SWSI_json = MVLayer(
 #        source='GeoJSON',
 #        options={'url': '/static/tethys_gizmos/data/SWSI_2017Dec.geojson', 'featureProjection': 'EPSG:3857'},
@@ -139,7 +169,7 @@ def drought_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,nwm_stream,nwm_stream_anom,nwm_soil,snodas_swe,water_watch,SWSI_kml,usdm_current,watersheds],
+            layers=[tiger_boundaries,nwm_stream,nwm_stream_anom,nwm_soil,snodas_swe,water_watch,SWSI_kml,coco_geojson,usdm_current,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -732,6 +762,91 @@ def drought_prec_map(request):
 
     return render(request, 'co_drought/drought_prec.html', context)
 ##################### End Drought Precip Map #############################################
+############################## Drought Vulnerability Main ############################################
+@login_required()
+def drought_vuln_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.6, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.8},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+    
+    ##### WMS Layers - Ryan
+    usdm_legend = MVLegendImageClass(value='Drought Category',
+                             image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
+    usdm_current = MVLayer(
+            source='ImageWMS',
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':False,'opacity':0.25},
+            legend_title='USDM',
+            legend_classes=[usdm_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
+   
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+        
+    ag_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_Ag_vuln_score_2018.kml'},
+        layer_options={'visible':True,'opacity':0.5},
+        legend_title='Ag Vulnerability Score',
+        feature_selection=True,
+        legend_classes=['/static/tethys_gizmos/data/ag_vuln_legend.PNG'],
+        legend_extent=[-126, 24.5, -66.2, 49])
+        
+    # Define GeoJSON layer
+    with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
+        data = json.load(f)
+        
+    coco_geojson = MVLayer(
+        source='GeoJSON',
+        options=data,
+        legend_title='Condition Monitor',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=True,
+        legend_classes=[MVLegendClass('point', 'Report', fill='#d84e1f')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#d84e1f'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+        
+    # Define map view options
+    drought_vuln_map_view_options = MapView(
+            height='630px',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,coco_geojson,ag_vuln_kml,usdm_current,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_vuln_map_view_options':drought_vuln_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_vuln.html', context)
+##################### End Drought Vulnerability Map #############################################
 #########################################################################################
 @login_required()
 def drought_4pane(request):

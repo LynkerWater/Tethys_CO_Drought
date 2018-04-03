@@ -62,6 +62,11 @@ class DamInventory(TethysAppBase):
                 controller='co_drought.controllers.drought_4pane'
             ),
             UrlMap(
+                name='drought_vuln',
+                url='co-drought/drought_vuln',
+                controller='co_drought.controllers.drought_vuln_map'
+            ),
+            UrlMap(
                 name='add_dam',
                 url='co-drought/dams/add',
                 controller='co_drought.controllers.add_dam'

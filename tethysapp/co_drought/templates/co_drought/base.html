@@ -19,6 +19,7 @@
   {% url 'co_drought:drought_index' as drought_map_index_url %}
   {% url 'co_drought:drought_veg_index' as drought_map_veg_index_url %}
   {% url 'co_drought:drought_prec' as drought_map_prec_url %}
+  {% url 'co_drought:drought_vuln' as drought_map_vuln_url %}
   {% url 'co_drought:drought_4pane' as drought_4pane_map_url %}
   <!--{% url 'co_drought:home' as home_url %}-->
   <!--{% url 'co_drought:add_dam' as add_dam_url %}-->
@@ -30,6 +31,7 @@
   <li class="{% if request.path == drought_map_index_url %}active{% endif %}"data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Current drought index products including the US Drought Monitor, SWSI, VegDRI, and QuickDRI"><a href="{{ drought_map_index_url }}">Drought Index Map</a></li>
   <li class="{% if request.path == drought_map_veg_index_url %}active{% endif %}"data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Current drought vegetation index products including VegDRI and QuickDRI"><a href="{{ drought_map_veg_index_url }}">Drought Veg Index Map</a></li>
   <li class="{% if request.path == drought_map_prec_url %}active{% endif %}"data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Current and forecasted precipitation products including SNODAS SWE, previous 7-day Precip, & WPC 5-day QPF"><a href="{{ drought_map_prec_url }}">Drought Precip Map</a></li>
+  <li class="{% if request.path == drought_map_vuln_url %}active{% endif %}"data-toggle="tooltip" data-placement="bottom" title="" data-original-title="CO Drought Plan county vulnerability scores with CoCoRaHS conditional monitoring reports"><a href="{{ drought_map_vuln_url }}">Drought Vulnerability Map</a></li>
   <li class="{% if request.path == drought_4pane_map_url %}active{% endif %}"data-toggle="tooltip" data-placement="bottom" title="" data-original-title="4-panel map of key drought tools including UDSM, CPC Drought Outlook, NWM Forecast, & Current Snowpack"><a href="{{ drought_4pane_map_url }}">Drought 4-Pane Map</a></li>
   <!--<li class="{% if request.path == home_url %}active{% endif %}"><a href="{{ home_url }}">Home</a></li>-->
   <!--<li class="{% if request.path == list_dam_url %}active{% endif %}"><a href="{{ list_dam_url }}">Dams</a></li>-->
