@@ -152,7 +152,7 @@ def drought_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,nwm_stream,nwm_stream_anom,nwm_soil,snodas_swe,water_watch,SWSI_kml,coco_geojson,usdm_current,fire_intensity,watersheds],
+            layers=[tiger_boundaries,nwm_stream,nwm_stream_anom,nwm_soil,snodas_swe,water_watch,SWSI_kml,coco_geojson,usdm_current,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -806,7 +806,7 @@ def drought_fire_map(request):
             MVLegendClass('polygon', '5', fill='rgba(255,170,0,0.5)'),
             MVLegendClass('polygon', '6', fill='rgba(168,0,0,0.5)'),
             MVLegendClass('polygon', '7 Highest Intensity', fill='rgba(230,0,0,0.5)')],
-        layer_options={'visible':True,'opacity':0.6},
+        layer_options={'visible':False,'opacity':0.6},
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
     # Define map view options
