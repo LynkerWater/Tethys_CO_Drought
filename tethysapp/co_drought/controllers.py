@@ -70,7 +70,6 @@ def drought_map(request):
             legend_title='USGS Water Watch',
             legend_classes=[ww_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
-
    
     # USGS Rest server for HUC watersheds        
     watersheds = MVLayer(
@@ -101,7 +100,7 @@ def drought_map(request):
         source='TileArcGISRest',
         options={'url': 'https://mapservice.nohrsc.noaa.gov/arcgis/rest/services/national_water_model/NWM_Stream_Analysis/MapServer',
                 'params': {'LAYERS': 'show:7,8,9,10,11,12'}},
-        legend_title='NWM Flow Anomoly',
+        legend_title='NWM Flow Anamaly',
         layer_options={'visible':True,'opacity':1.0},
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
@@ -126,29 +125,13 @@ def drought_map(request):
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
     # Define GeoJSON layer
-    geojson_object = {
-        'type': 'FeatureCollection',
-        'crs': {
-            'type': 'name',
-            'properties': {
-                'name': 'EPSG:4326'
-            }
-        },
-        'features': [
-            {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-105.000,40.0000]
-                }
-            }]}
     with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
         data = json.load(f)
         
     coco_geojson = MVLayer(
         source='GeoJSON',
         options=data,
-        legend_title='Test GeoJSON',
+        legend_title='Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=True,
         legend_classes=[MVLegendClass('point', 'point', fill='#d84e1f')],
@@ -161,7 +144,7 @@ def drought_map(request):
 #        layer_options={'visible':True,'opacity':0.4},
 #        feature_selection=True,
 #        legend_extent=[-110, 36, -101.5, 41.6])  
-        
+                
     # Define map view options
     drought_map_view_options = MapView(
             height='630px',
@@ -169,7 +152,7 @@ def drought_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,nwm_stream,nwm_stream_anom,nwm_soil,snodas_swe,water_watch,SWSI_kml,coco_geojson,usdm_current,watersheds],
+            layers=[tiger_boundaries,nwm_stream,nwm_stream_anom,nwm_soil,snodas_swe,water_watch,SWSI_kml,coco_geojson,usdm_current,fire_intensity,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -237,7 +220,7 @@ def drought_map_nwmforecast(request):
         source='TileArcGISRest',
         options={'url': 'https://mapservice.nohrsc.noaa.gov/arcgis/rest/services/national_water_model/NWM_Stream_Analysis/MapServer',
                 'params': {'LAYERS': 'show:7,8,9,10,11,12'}},
-        legend_title='NWM Flow Anomoly',
+        legend_title='NWM Flow Anamaly',
         layer_options={'visible':True,'opacity':1.0},
         legend_classes=[
             MVLegendClass('line', 'High', stroke='rgba(176,28,232,0.9)'),
@@ -700,7 +683,7 @@ def drought_prec_map(request):
                      'params': {'LAYERS': 'PRECIP_TP7'},
                    'serverType': 'geoserver'},
             layer_options={'visible':True,'opacity':0.5},
-            legend_title='7-day Precip',
+            legend_title='Prev 7-day Precip',
             legend_classes=[prec7_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
                
@@ -762,6 +745,89 @@ def drought_prec_map(request):
 
     return render(request, 'co_drought/drought_prec.html', context)
 ##################### End Drought Precip Map #############################################
+############################## Drought Fire Main ############################################
+@login_required()
+def drought_fire_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.6, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.8},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+        
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+
+    ## Colorado Wildfire Risk Assessment Portal - Fire Intensity Scale
+    # https://www.coloradowildfirerisk.com/map/Public
+    fire_intensity = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://www.coloradowildfirerisk.com/arcgis/rest/services/WUI_fieldwork/FireIntensityScale/MapServer',
+                'params': {'LAYERS': 'show:0'}},
+        legend_title='Fire Intensity Scale',
+        legend_classes=[
+            MVLegendClass('polygon', 'Lowest Intensity', fill='rgba(199,215,158,0.5)'),
+            MVLegendClass('polygon', '', fill='rgba(255,255,190,0.5)'),
+            MVLegendClass('polygon', 'Moderate Intensity', fill='rgba(255,214,79,0.5)'),
+            MVLegendClass('polygon', '', fill='rgba(255,153,0,0.5)'),
+            MVLegendClass('polygon', 'Highest Intensity', fill='rgba(230,0,0,0.5)')],
+        layer_options={'visible':True,'opacity':0.6},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+        
+    fire_occur = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://www.coloradowildfirerisk.com/arcgis/rest/services/WUI_fieldwork/FireOccurrenceAreas/MapServer',
+                'params': {'LAYERS': 'show:0'}},
+        legend_title='Fire Occurance Areas',
+        legend_classes=[
+            MVLegendClass('polygon', '1 Lowest Occurrence', fill='rgba(204,204,204,0.5)'),
+            MVLegendClass('polygon', '2', fill='rgba(199,215,158,0.5)'),
+            MVLegendClass('polygon', '3', fill='rgba(242,242,183,0.5)'),
+            MVLegendClass('polygon', '4', fill='rgba(255,211,127,0.5)'),
+            MVLegendClass('polygon', '5', fill='rgba(255,170,0,0.5)'),
+            MVLegendClass('polygon', '6', fill='rgba(168,0,0,0.5)'),
+            MVLegendClass('polygon', '7 Highest Intensity', fill='rgba(230,0,0,0.5)')],
+        layer_options={'visible':True,'opacity':0.6},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+        
+    # Define map view options
+    drought_fire_map_view_options = MapView(
+            height='630px',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,fire_intensity,fire_occur,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_fire_map_view_options':drought_fire_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_fire.html', context)
+############################## End Drought Fire Map #############################################
 ############################## Drought Vulnerability Main ############################################
 @login_required()
 def drought_vuln_map(request):
