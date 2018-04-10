@@ -34,6 +34,17 @@ $(function()
 		  visible: true,
           opacity: 0.6
       })
+        var ag_vuln = new ol.layer.Vector({
+          extent: [-13884991, 2870341, -7455066, 6338219],
+          source: new ol.source.Vector({
+            url: '/static/tethys_gizmos/data/CO_Ag_vuln_score_2018.kml',
+            format: new ol.format.KML(),
+            ratio: 1,
+            attributions: 'Ag Vulnerability Score'
+          }),
+		  visible: true,
+          opacity: 0.6
+      })
         var ncdc_pdsi = new ol.layer.Tile({
           extent: [-13884991, 2870341, -7455066, 6338219],
           source: new ol.source.TileArcGISRest({
@@ -96,7 +107,7 @@ $(function()
       });
       var map2 = new ol.Map({
         target: 'map2',
-        layers: [layer, spi_6,tiger_county_state],
+        layers: [layer, ag_vuln,tiger_county_state],
         controls: new ol.Collection(),
         view: view
       });

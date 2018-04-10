@@ -135,7 +135,8 @@ def drought_map(request):
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=True,
         legend_classes=[MVLegendClass('point', 'point', fill='#d84e1f')],
-        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#d84e1f'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+        layer_options={'style': {'image': {'circle': {'radius': 5,'points':3,'fill': {'color':  '#d84e1f'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+        #layer_options={'style': 'flickrStyle'})
         
 #    SWSI_json = MVLayer(
 #        source='GeoJSON',
@@ -367,7 +368,7 @@ def drought_map_outlook(request):
         options={'url': 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/wpc_qpf/MapServer',
                 'params': {'LAYERS': 'show:10'}},
         legend_title='WPC 5-day QPF',
-        layer_options={'visible':True,'opacity':0.5},
+        layer_options={'visible':False,'opacity':0.5},
         legend_extent=[-112, 36.3, -98.5, 41.66])
 
     # Define map view options
@@ -437,7 +438,7 @@ def drought_index_map(request):
             source='ImageWMS',
             options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
                      'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
-            layer_options={'opacity':0.5},
+            layer_options={'opacity':0.3},
             legend_title='USDM',
             legend_classes=[usdm_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
@@ -452,13 +453,12 @@ def drought_index_map(request):
         legend_extent=[-126, 24.5, -66.2, 49])
             
     # ESI Data from USDA
-    esi_2 = MVLayer(
+    esi_1 = MVLayer(
             source='ImageWMS',
             options={'url': 'https://hrsl.ba.ars.usda.gov/wms.esi.2012?',
-                     'params': {'LAYERS': 'ESI_current_2month', 'VERSION':'1.1.3', 'SRS':'EPSG%3A4326','EPSG':'4326','CRS':'EPSG:4326'},
-                   'serverType': 'geoserver'},
+                     'params': {'LAYERS': 'ESI_current_1month', 'VERSION':'1.1.3', 'CRS':'EPSG:4326'}},
             layer_options={'visible':False,'opacity':0.5},
-            legend_title='ESI - 2 month',
+            legend_title='ESI - 1 month',
             legend_extent=[-126, 24.5, -66.2, 49])
 
     # Define SWSI KML Layer
@@ -466,7 +466,7 @@ def drought_index_map(request):
         source='KML',
         options={'url': '/static/tethys_gizmos/data/SWSI_2017Dec.kml'},
         legend_title='SWSI',
-        layer_options={'visible':False,'opacity':0.7},
+        layer_options={'visible':True,'opacity':0.7},
         feature_selection=True,
         legend_extent=[-110, 36, -101.5, 41.6])
         
@@ -718,7 +718,7 @@ def drought_prec_map(request):
         layer_options={'visible':False,'opacity':0.5},
         legend_extent=[-112, 36.3, -98.5, 41.66])
     
-    # testing homemand kml image dispaly for SNODAS % daily median SWE (kml not working)    
+    # testing homemand kml image dispaly for SNODAS % daily median SWE (kml not working - kmz contains png with data??)    
     snodas_kml_med = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/20180322_multyear_perc_med.kmz'},
@@ -790,7 +790,7 @@ def drought_fire_map(request):
             MVLegendClass('polygon', 'Moderate Intensity', fill='rgba(255,214,79,0.5)'),
             MVLegendClass('polygon', '', fill='rgba(255,153,0,0.5)'),
             MVLegendClass('polygon', 'Highest Intensity', fill='rgba(230,0,0,0.5)')],
-        layer_options={'visible':True,'opacity':0.6},
+        layer_options={'visible':False,'opacity':0.6},
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
     fire_occur = MVLayer(
@@ -809,6 +809,19 @@ def drought_fire_map(request):
         layer_options={'visible':False,'opacity':0.6},
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
+    ## WFAS - Severe Fire Weather Potential Forecast 
+    ## https://m.wfas.net/wfas_sfwp_map.html
+    wfas_legend = MVLegendImageClass(value='SFWF',
+                             image_url='https://www.wfas.net/cgi-bin/mapserv?map=/var/www/html/nfdr/mapfiles/ndfd_geog5.map&SERVICE=WMS&VERSION=1.3.0&SLD_VERSION=1.1.0&REQUEST=GetLegendGraphic&FORMAT=image/jpeg&LAYER=fbxday0&STYLE=')
+    wfas_sfw = MVLayer(
+        source='ImageWMS',
+        options={'url': 'https://www.wfas.net/cgi-bin/mapserv?map=/var/www/html/nfdr/mapfiles/wfas_wms_new.map',
+                 'params': {'LAYERS': 'fbxday0'}},
+        layer_options={'visible':True,'opacity':0.7},
+        legend_title='Fire Weather Forecast',
+        legend_classes=[wfas_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+        
     # Define map view options
     drought_fire_map_view_options = MapView(
             height='630px',
@@ -816,7 +829,7 @@ def drought_fire_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,fire_intensity,fire_occur,watersheds],
+            layers=[tiger_boundaries,wfas_sfw,fire_intensity,fire_occur,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -871,28 +884,64 @@ def drought_vuln_map(request):
         legend_title='HUC Watersheds',
         layer_options={'visible':False,'opacity':0.4},
         legend_extent=[-112, 36.3, -98.5, 41.66])
-        
+    
+    # Ag vulnerability county risk score map -> from 2018 CO Drought Plan update
+    ag_vuln_legend = MVLegendImageClass(value='Risk Score',
+                             image_url='/static/tethys_gizmos/data/ag_vuln_legend.jpg')
     ag_vuln_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/CO_Ag_vuln_score_2018.kml'},
         layer_options={'visible':True,'opacity':0.5},
         legend_title='Ag Vulnerability Score',
         feature_selection=True,
-        legend_classes=['/static/tethys_gizmos/data/ag_vuln_legend.PNG'],
+        legend_classes=[ag_vuln_legend],
         legend_extent=[-126, 24.5, -66.2, 49])
         
     # Define GeoJSON layer
+    # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
     with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
         data = json.load(f)
         
-    coco_geojson = MVLayer(
+    # the section below is grouping data by 'scalebar' drought condition
+    # this is a work around for displaying each drought report classification with a unique colored icon
+    data_sd = {}; data_md ={}; data_ml={}
+    data_sd[u'type'] = data['type']; data_md[u'type'] = data['type']; data_ml[u'type'] = data['type']
+    data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
+    for element in data['features']:
+        if 'Severely Dry' in element['properties']['scalebar']:
+            data_sd[u'features'].append(element)
+        if 'Moderately Dry' in element['properties']['scalebar']:
+            data_md[u'features'].append(element)
+        if 'Mildly Dry' in element['properties']['scalebar']:
+            data_ml[u'features'].append(element)
+        
+    cocojson_sevdry = MVLayer(
         source='GeoJSON',
-        options=data,
+        options=data_sd,
         legend_title='Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=True,
-        legend_classes=[MVLegendClass('point', 'Report', fill='#d84e1f')],
-        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#d84e1f'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+        legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_moddry = MVLayer(
+        source='GeoJSON',
+        options=data_md,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=True,
+        legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_mildry = MVLayer(
+        source='GeoJSON',
+        options=data_ml,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=True,
+        legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
         
     # Define map view options
     drought_vuln_map_view_options = MapView(
@@ -901,7 +950,7 @@ def drought_vuln_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,coco_geojson,ag_vuln_kml,usdm_current,watersheds],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,ag_vuln_kml,usdm_current,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True

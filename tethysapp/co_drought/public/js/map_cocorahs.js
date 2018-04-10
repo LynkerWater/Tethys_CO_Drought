@@ -29,6 +29,7 @@ $(function()
 
             var popup_content = '<div class="drought-popup">' +
                                     '<p><b>Date: ' + selected_feature.get('reportdate') + '</b></p>' +
+                                    '<p><b>Condition: ' + selected_feature.get('scalebar') + '</b></p>' +
                                     '<p><b>Report Type: ' + selected_feature.get('categories') + '</b></p>' +
                                     '<p><b>Desc: ' + selected_feature.get('description') + '</b></p>' +
                                 '</div>';
