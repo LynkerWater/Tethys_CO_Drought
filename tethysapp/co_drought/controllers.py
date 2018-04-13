@@ -6,6 +6,7 @@ import datetime
 import json
 from .model import add_new_dam, get_all_dams
 
+## calculate date info necessary for some mapserver data requests
 today = datetime.datetime.now()
 yearnow = today.year
 monthnow = today.month
@@ -22,7 +23,7 @@ def drought_map(request):
     Controller for the app drought map page.
     """
            
-    view_center = [-105.6, 39.0]
+    view_center = [-105.2, 39.0]
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,
@@ -80,12 +81,15 @@ def drought_map(request):
         legend_extent=[-112, 36.3, -98.5, 41.66])
 
     # Define SWSI KML Layer
+    swsi_legend = MVLegendImageClass(value='SWSI',
+                             image_url='/static/tethys_gizmos/data/swsi_legend.PNG')
     SWSI_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/SWSI_2017Dec.kml'},
+        options={'url': '/static/tethys_gizmos/data/SWSI_2018Apr.kml'},
         legend_title='SWSI',
         layer_options={'visible':False,'opacity':0.7},
         feature_selection=True,
+        legend_classes=[swsi_legend],
         legend_extent=[-110, 36, -101.5, 41.6])
     
     # NOAA Rest server for NWM streamflow      
@@ -134,8 +138,8 @@ def drought_map(request):
         legend_title='Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=True,
-        legend_classes=[MVLegendClass('point', 'point', fill='#d84e1f')],
-        layer_options={'style': {'image': {'circle': {'radius': 5,'points':3,'fill': {'color':  '#d84e1f'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+        legend_classes=[MVLegendClass('point', 'point', fill='#696969')],
+        layer_options={'style': {'image': {'circle': {'radius': 5,'points':3,'fill': {'color':  '#696969'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
         #layer_options={'style': 'flickrStyle'})
         
 #    SWSI_json = MVLayer(
@@ -172,7 +176,7 @@ def drought_map_nwmforecast(request):
     Controller for the app drought map page.
     """
            
-    view_center = [-105.6, 39.0]
+    view_center = [-105.2, 39.0]
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,
@@ -287,7 +291,7 @@ def drought_map_outlook(request):
     Controller for the app drought map page.
     """
            
-    view_center = [-105.6, 39.0]
+    view_center = [-105.2, 39.0]
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,
@@ -319,7 +323,7 @@ def drought_map_outlook(request):
             options={'url': 'https://edcintl.cr.usgs.gov/geoserver/qdriwaterwatchshapefile/wms?',
                      'params': {'LAYERS': 'water_watch_today'},
                    'serverType': 'geoserver'},
-            layer_options={'visible':True,'opacity':0.5},
+            layer_options={'visible':False,'opacity':0.5},
             legend_title='USGS Water Watch',
             legend_classes=[ww_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
@@ -368,7 +372,7 @@ def drought_map_outlook(request):
         options={'url': 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/wpc_qpf/MapServer',
                 'params': {'LAYERS': 'show:10'}},
         legend_title='WPC 5-day QPF',
-        layer_options={'visible':False,'opacity':0.5},
+        layer_options={'visible':True,'opacity':0.3},
         legend_extent=[-112, 36.3, -98.5, 41.66])
 
     # Define map view options
@@ -397,7 +401,7 @@ def drought_index_map(request):
     Controller for the app drought map page.
     """
            
-    view_center = [-105.6, 39.0]
+    view_center = [-105.2, 39.0]
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,
@@ -462,12 +466,15 @@ def drought_index_map(request):
             legend_extent=[-126, 24.5, -66.2, 49])
 
     # Define SWSI KML Layer
+    swsi_legend = MVLegendImageClass(value='',
+                             image_url='/static/tethys_gizmos/data/swsi_legend.PNG')
     SWSI_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/SWSI_2017Dec.kml'},
+        options={'url': '/static/tethys_gizmos/data/SWSI_2018Apr.kml'},
         legend_title='SWSI',
         layer_options={'visible':True,'opacity':0.7},
         feature_selection=True,
+        legend_classes=[swsi_legend],
         legend_extent=[-110, 36, -101.5, 41.6])
         
     # NCDC/NIDIS precip index
@@ -553,7 +560,7 @@ def drought_veg_index_map(request):
     Controller for the app drought map page.
     """
            
-    view_center = [-105.6, 39.0]
+    view_center = [-105.2, 39.0]
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,
@@ -650,7 +657,7 @@ def drought_prec_map(request):
     Controller for the app drought map page.
     """
            
-    view_center = [-105.6, 39.0]
+    view_center = [-105.2, 39.0]
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,
@@ -675,17 +682,27 @@ def drought_prec_map(request):
         layer_options={'visible':False,'opacity':0.4},
         legend_extent=[-112, 36.3, -98.5, 41.66])
     
+    # Previous 7-day precip from USGS (not working) 
     prec7_legend = MVLegendImageClass(value='7-day Precip Total',
                          image_url='https://vegdri.cr.usgs.gov/wms.php?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&LAYER=PRECIP_TP7')   
     precip7day = MVLayer(
             source='ImageWMS',
             options={'url': 'https://vegdri.cr.usgs.gov/wms.php?',
-                     'params': {'LAYERS': 'PRECIP_TP7'},
+                     'params': {'LAYERS': 'PRECIP_RD7'},
                    'serverType': 'geoserver'},
             layer_options={'visible':True,'opacity':0.5},
             legend_title='Prev 7-day Precip',
             legend_classes=[prec7_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
+            
+    # NWS Precip analysis data       
+    nws_prec7 = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/rfc_dly_qpe/MapServer',
+                'params': {'LAYERS': 'show:15'}},
+        legend_title='7-day % of Norm',
+        layer_options={'visible':False,'opacity':0.6},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
                
     # NOAA NOHRSC snow products
     snodas_swe = MVLayer(
@@ -733,7 +750,7 @@ def drought_prec_map(request):
             controls=['ZoomSlider', 'Rotate', 'FullScreen', 'ScaleLine', 'WMSLegend',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-112, 36.3, -98.5, 41.66]}}],
-            layers=[tiger_boundaries,snodas_swe,precip7day,watersheds],
+            layers=[tiger_boundaries,snodas_swe,nws_prec7,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -752,7 +769,7 @@ def drought_fire_map(request):
     Controller for the app drought map page.
     """
            
-    view_center = [-105.6, 39.0]
+    view_center = [-105.2, 39.0]
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,
@@ -822,6 +839,18 @@ def drought_fire_map(request):
         legend_classes=[wfas_legend],
         legend_extent=[-126, 24.5, -66.2, 49])
         
+    ## NOAA - nowcoast fire weather
+    nws_fire_hazards = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/wwa_meteoceanhydro_longduration_hazards_time/MapServer',
+                'params': {'LAYERS': 'show:38'}},
+        legend_title='NWS Fire Hazards',
+        legend_classes=[
+            MVLegendClass('polygon', 'Red Flag Warning', fill='rgba(255,20,147,0.6)'),
+            MVLegendClass('polygon', 'Fire Weather Watch', fill='rgba(255,222,173,0.6)')],
+        layer_options={'visible':False,'opacity':0.6},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+        
     # Define map view options
     drought_fire_map_view_options = MapView(
             height='630px',
@@ -829,7 +858,7 @@ def drought_fire_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,wfas_sfw,fire_intensity,fire_occur,watersheds],
+            layers=[tiger_boundaries,wfas_sfw,fire_intensity,fire_occur,nws_fire_hazards,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -848,7 +877,7 @@ def drought_vuln_map(request):
     Controller for the app drought map page.
     """
            
-    view_center = [-105.6, 39.0]
+    view_center = [-105.2, 39.0]
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,

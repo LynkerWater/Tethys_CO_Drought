@@ -45,6 +45,17 @@ $(function()
 		  visible: true,
           opacity: 0.6
       })
+        var nws_hazards = new ol.layer.Tile({
+          extent: [-13884991, 2870341, -7455066, 6338219],
+          source: new ol.source.TileArcGISRest({
+            url: 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/watch_warn_adv/MapServer',
+            params: {'LAYERS': 'show:1'},
+            ratio: 1,
+            attributions: 'NWS Hazards'
+          }),
+		  visible: true,
+          opacity: 0.6
+      })
         var ncdc_pdsi = new ol.layer.Tile({
           extent: [-13884991, 2870341, -7455066, 6338219],
           source: new ol.source.TileArcGISRest({
@@ -113,7 +124,7 @@ $(function()
       });
 	  var map3 = new ol.Map({
         target: 'map3',
-        layers: [layer,ncdc_pdsi,tiger_county_state],
+        layers: [layer,nws_hazards,tiger_county_state],
         controls: new ol.Collection(),
         view: view
       });
