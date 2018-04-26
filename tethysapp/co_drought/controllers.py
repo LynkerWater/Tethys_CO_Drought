@@ -15,6 +15,7 @@ if len(str(prevmonth)) == 1:
     prevmonth = '0' + str(prevmonth)
 if len(str(monthnow)) == 1:
     monthnow = '0' + str(monthnow)
+week8 = today - datetime.timedelta(weeks=8)
         
 ############################## Drought Map Main ############################################
 @login_required()
@@ -105,7 +106,7 @@ def drought_map(request):
         options={'url': 'https://mapservice.nohrsc.noaa.gov/arcgis/rest/services/national_water_model/NWM_Stream_Analysis/MapServer',
                 'params': {'LAYERS': 'show:7,8,9,10,11,12'}},
         legend_title='NWM Flow Anamaly',
-        layer_options={'visible':True,'opacity':1.0},
+        layer_options={'visible':False,'opacity':1.0},
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
     # NOAA NOHRSC snow products
@@ -442,7 +443,7 @@ def drought_index_map(request):
             source='ImageWMS',
             options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
                      'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
-            layer_options={'opacity':0.3},
+            layer_options={'visible':False,'opacity':0.3},
             legend_title='USDM',
             legend_classes=[usdm_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
@@ -541,7 +542,7 @@ def drought_index_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-112, 36.3, -98.5, 41.66]}}],
-            layers=[tiger_boundaries,climo_divs,usdm_current,ncdc_pdsi,ncdc_palmz,ncdc_spi_1,ncdc_spi_3,ncdc_spi_6,SWSI_kml,watersheds],
+            layers=[tiger_boundaries,climo_divs,ncdc_pdsi,ncdc_palmz,ncdc_spi_1,ncdc_spi_3,ncdc_spi_6,SWSI_kml,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -695,7 +696,7 @@ def drought_prec_map(request):
             legend_classes=[prec7_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
             
-    # NWS Precip analysis data       
+    # NWS Precip analysis data     
     nws_prec7 = MVLayer(
         source='TileArcGISRest',
         options={'url': 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/rfc_dly_qpe/MapServer',
@@ -703,6 +704,18 @@ def drought_prec_map(request):
         legend_title='7-day % of Norm',
         layer_options={'visible':False,'opacity':0.6},
         legend_extent=[-112, 36.3, -98.5, 41.66])
+
+    # NEXRAD Radar reflectivity  
+    nexrad_legend = MVLegendImageClass(value='Base Reflectivity',
+                         image_url='https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi?version=1.1.1&amp;service=WMS&amp;request=GetLegendGraphic&amp;layer=nexrad-n0q-900913&amp;format=image/png&amp;STYLE=default')   
+    nexrad = MVLayer(
+        source='ImageWMS',
+            options={'url': 'https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi?',
+                     'params': {'LAYERS': 'nexrad-n0q-900913'}},
+            layer_options={'visible':True,'opacity':0.5},
+            legend_title='NEXRAD',
+            legend_classes=[nexrad_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
                
     # NOAA NOHRSC snow products
     snodas_swe = MVLayer(
@@ -750,7 +763,7 @@ def drought_prec_map(request):
             controls=['ZoomSlider', 'Rotate', 'FullScreen', 'ScaleLine', 'WMSLegend',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-112, 36.3, -98.5, 41.66]}}],
-            layers=[tiger_boundaries,snodas_swe,nws_prec7,watersheds],
+            layers=[tiger_boundaries,snodas_swe,nws_prec7,nexrad,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -926,6 +939,34 @@ def drought_vuln_map(request):
         legend_classes=[ag_vuln_legend],
         legend_extent=[-126, 24.5, -66.2, 49])
         
+    # USDM 8-week Drought category counts by county (D2-D4)
+    usdm_county_wk_legend = MVLegendImageClass(value='',
+                             image_url='/static/tethys_gizmos/data/county_drought_8wk.jpg')
+    usdm_D4_8wk_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/D4_8wk_counties.kml'},
+        layer_options={'visible':False,'opacity':0.5},
+        legend_title='USDM D4 Counties',
+        feature_selection=False,
+        legend_classes=[usdm_county_wk_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+    usdm_D3_8wk_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/D3_8wk_counties.kml'},
+        layer_options={'visible':False,'opacity':0.5},
+        legend_title='USDM D3+ Counties',
+        feature_selection=False,
+        legend_classes=[usdm_county_wk_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+    usdm_D2_8wk_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/D2_8wk_counties.kml'},
+        layer_options={'visible':False,'opacity':0.5},
+        legend_title='USDM D2+ Counties',
+        feature_selection=False,
+        legend_classes=[usdm_county_wk_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+        
     # Define GeoJSON layer
     # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
     with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
@@ -938,11 +979,17 @@ def drought_vuln_map(request):
     data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
-            data_sd[u'features'].append(element)
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
-            data_md[u'features'].append(element)
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
-            data_ml[u'features'].append(element)
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
@@ -979,7 +1026,7 @@ def drought_vuln_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,ag_vuln_kml,usdm_current,watersheds],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,ag_vuln_kml,usdm_D2_8wk_kml,usdm_D3_8wk_kml,usdm_D4_8wk_kml,usdm_current,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -991,6 +1038,149 @@ def drought_vuln_map(request):
 
     return render(request, 'co_drought/drought_vuln.html', context)
 ##################### End Drought Vulnerability Map #############################################
+############################## Drought Monitor Main ############################################
+@login_required()
+def drought_monitor_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.2, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.8},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+    
+    ##### WMS Layers - Ryan
+    usdm_legend = MVLegendImageClass(value='Drought Category',
+                             image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
+    usdm_current = MVLayer(
+            source='ImageWMS',
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':False,'opacity':0.25},
+            legend_title='USDM',
+            legend_classes=[usdm_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
+   
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+        
+    # USDM 8-week Drought category counts by county (D2-D4)
+    usdm_county_wk_legend = MVLegendImageClass(value='',
+                             image_url='/static/tethys_gizmos/data/county_drought_8wk.jpg')
+    usdm_D4_8wk_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/D4_8wk_counties.kml'},
+        layer_options={'visible':False,'opacity':0.5},
+        legend_title='USDM D4 Counties',
+        feature_selection=False,
+        legend_classes=[usdm_county_wk_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+    usdm_D3_8wk_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/D3_8wk_counties.kml'},
+        layer_options={'visible':False,'opacity':0.5},
+        legend_title='USDM D3+ Counties',
+        feature_selection=False,
+        legend_classes=[usdm_county_wk_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+    usdm_D2_8wk_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/D2_8wk_counties.kml'},
+        layer_options={'visible':True,'opacity':0.5},
+        legend_title='USDM D2+ Counties',
+        feature_selection=False,
+        legend_classes=[usdm_county_wk_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+        
+    # Define GeoJSON layer
+    # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
+    with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
+        data = json.load(f)
+        
+    # the section below is grouping data by 'scalebar' drought condition
+    # this is a work around for displaying each drought report classification with a unique colored icon
+    data_sd = {}; data_md ={}; data_ml={}
+    data_sd[u'type'] = data['type']; data_md[u'type'] = data['type']; data_ml[u'type'] = data['type']
+    data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
+    for element in data['features']:
+        if 'Severely Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_sd[u'features'].append(element)
+        if 'Moderately Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_md[u'features'].append(element)
+        if 'Mildly Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_ml[u'features'].append(element)
+        
+    cocojson_sevdry = MVLayer(
+        source='GeoJSON',
+        options=data_sd,
+        legend_title='Condition Monitor',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_moddry = MVLayer(
+        source='GeoJSON',
+        options=data_md,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_mildry = MVLayer(
+        source='GeoJSON',
+        options=data_ml,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+        
+    # Define map view options
+    drought_monitor_map_view_options = MapView(
+            height='630px',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,usdm_D2_8wk_kml,usdm_D3_8wk_kml,usdm_D4_8wk_kml,usdm_current,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_monitor_map_view_options':drought_monitor_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_monitor.html', context)
+##################### End Drought Monitor Map #############################################
 #########################################################################################
 @login_required()
 def drought_4pane(request):

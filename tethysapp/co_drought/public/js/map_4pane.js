@@ -124,7 +124,7 @@ $(function()
       });
 	  var map3 = new ol.Map({
         target: 'map3',
-        layers: [layer,nws_hazards,tiger_county_state],
+        layers: [layer,ncep_month_outlook_layer,nws_hazards,tiger_county_state],
         controls: new ol.Collection(),
         view: view
       });
