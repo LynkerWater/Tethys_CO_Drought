@@ -5,6 +5,14 @@ from tethys_sdk.gizmos import MapView, Button, ToggleSwitch, TextInput, DatePick
 import datetime
 import json
 from .model import add_new_dam, get_all_dams
+import os
+from app import DamInventory as app
+
+# geojson file location for local processing
+app_workspace = app.get_app_workspace()
+como_cocorahs = os.path.join(app_workspace.path, 'cartodb-query.geojson')
+#print 'app work loc -> ' + app_workspace.path
+#print 'rool loc -> ' + str(app.root_url)
 
 ## calculate date info necessary for some mapserver data requests
 today = datetime.datetime.now()
@@ -130,7 +138,7 @@ def drought_map(request):
         legend_extent=[-112, 36.3, -98.5, 41.66])
         
     # Define GeoJSON layer
-    with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
+    with open(como_cocorahs) as f:
         data = json.load(f)
         
     coco_geojson = MVLayer(
@@ -969,7 +977,7 @@ def drought_vuln_map(request):
         
     # Define GeoJSON layer
     # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
-    with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
+    with open(como_cocorahs) as f:
         data = json.load(f)
         
     # the section below is grouping data by 'scalebar' drought condition
@@ -1112,7 +1120,7 @@ def drought_monitor_map(request):
         
     # Define GeoJSON layer
     # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
-    with open(r'C:\Users\Lynker1\tethys\src\tethys_gizmos\static\tethys_gizmos\data\cartodb-query.geojson') as f:
+    with open(como_cocorahs) as f:
         data = json.load(f)
         
     # the section below is grouping data by 'scalebar' drought condition
