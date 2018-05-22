@@ -935,44 +935,58 @@ def drought_vuln_map(request):
         layer_options={'visible':False,'opacity':0.4},
         legend_extent=[-112, 36.3, -98.5, 41.66])
     
-    # Ag vulnerability county risk score map -> from 2018 CO Drought Plan update
-    ag_vuln_legend = MVLegendImageClass(value='Risk Score',
+    # Sector drought vulnerability county risk score maps -> from 2018 CO Drought Plan update
+    vuln_legend = MVLegendImageClass(value='Risk Score',
                              image_url='/static/tethys_gizmos/data/ag_vuln_legend.jpg')
+    energy_vuln_legend = MVLegendImageClass(value='Risk Score',
+                             image_url='/static/tethys_gizmos/data/energy_vuln_legend.jpg')
     ag_vuln_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/CO_Ag_vuln_score_2018.kml'},
-        layer_options={'visible':True,'opacity':0.5},
-        legend_title='Ag Vulnerability Score',
+        layer_options={'visible':True,'opacity':0.75},
+        legend_title='Ag Risk Score',
         feature_selection=True,
-        legend_classes=[ag_vuln_legend],
+        legend_classes=[vuln_legend],
         legend_extent=[-126, 24.5, -66.2, 49])
-        
-    # USDM 8-week Drought category counts by county (D2-D4)
-    usdm_county_wk_legend = MVLegendImageClass(value='',
-                             image_url='/static/tethys_gizmos/data/county_drought_8wk.jpg')
-    usdm_D4_8wk_kml = MVLayer(
+    energy_vuln_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/D4_8wk_counties.kml'},
-        layer_options={'visible':False,'opacity':0.5},
-        legend_title='USDM D4 Counties',
+        options={'url': '/static/tethys_gizmos/data/CO_Energy_vuln_score_2018.kml'},
+        layer_options={'visible':False,'opacity':0.75},
+        legend_title='Energy Risk Score',
         feature_selection=False,
-        legend_classes=[usdm_county_wk_legend],
+        legend_classes=[energy_vuln_legend],
         legend_extent=[-126, 24.5, -66.2, 49])
-    usdm_D3_8wk_kml = MVLayer(
+    environ_vuln_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/D3_8wk_counties.kml'},
-        layer_options={'visible':False,'opacity':0.5},
-        legend_title='USDM D3+ Counties',
-        feature_selection=False,
-        legend_classes=[usdm_county_wk_legend],
+        options={'url': '/static/tethys_gizmos/data/CO_Environ_vuln_score_2018.kml'},
+        layer_options={'visible':False,'opacity':0.75},
+        legend_title='Environ Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
         legend_extent=[-126, 24.5, -66.2, 49])
-    usdm_D2_8wk_kml = MVLayer(
+    rec_vuln_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/D2_8wk_counties.kml'},
-        layer_options={'visible':False,'opacity':0.5},
-        legend_title='USDM D2+ Counties',
-        feature_selection=False,
-        legend_classes=[usdm_county_wk_legend],
+        options={'url': '/static/tethys_gizmos/data/CO_Rec_vuln_score_2018.kml'},
+        layer_options={'visible':False,'opacity':0.75},
+        legend_title='Recreation Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+    socecon_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_SocEcon_vuln_score_2018.kml'},
+        layer_options={'visible':False,'opacity':0.75},
+        legend_title='Socioecon Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
+        legend_extent=[-126, 24.5, -66.2, 49])
+    state_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_StateAssets_vuln_score_2018.kml'},
+        layer_options={'visible':False,'opacity':0.75},
+        legend_title='State Assets Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
         legend_extent=[-126, 24.5, -66.2, 49])
         
     # Define GeoJSON layer
@@ -1034,7 +1048,7 @@ def drought_vuln_map(request):
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
-            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,ag_vuln_kml,usdm_D2_8wk_kml,usdm_D3_8wk_kml,usdm_D4_8wk_kml,usdm_current,watersheds],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,ag_vuln_kml,energy_vuln_kml,environ_vuln_kml,rec_vuln_kml,socecon_vuln_kml,state_vuln_kml,usdm_current,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True

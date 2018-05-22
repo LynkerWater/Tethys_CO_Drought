@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd http://www.google.com/kml/ext/2.2 http://code.google.com/apis/kml/schema/kml22gx.xsd">
-<Document id="Ag_total_rank">
-  <name>Ag_total_rank</name>
+<Document id="State_Assets_rank">
+  <name>State Assets_rank</name>
   <Snippet></Snippet>
   <Style id="PolyStyle00">
     <LabelStyle>
@@ -28,11 +28,11 @@
       <width>0.400000</width>
     </LineStyle>
     <PolyStyle>
-      <color>7f00aaff</color>
+      <color>7f0000e6</color>
       <outline>1</outline>
     </PolyStyle>
   </Style>
-  <Style id="PolyStyle010">
+  <Style id="PolyStyle02">
     <LabelStyle>
       <color>00000000</color>
       <scale>0.000000</scale>
@@ -42,11 +42,11 @@
       <width>0.400000</width>
     </LineStyle>
     <PolyStyle>
-      <color>7f0000e6</color>
+      <color>7f00aaff</color>
       <outline>1</outline>
     </PolyStyle>
   </Style>
-  <Style id="PolyStyle019">
+  <Style id="PolyStyle015">
     <LabelStyle>
       <color>00000000</color>
       <scale>0.000000</scale>
@@ -61,7 +61,7 @@
     </PolyStyle>
   </Style>
   <Folder id="FeatureLayer0">
-    <name>Ag_total_rank</name>
+    <name>State Assets_rank</name>
     <Snippet></Snippet>
     <Placemark id="ID_00000">
       <name>MOFFAT</name>
@@ -388,7 +388,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -499,7 +499,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -610,7 +610,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -721,7 +721,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -832,7 +832,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -1054,7 +1054,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -1276,7 +1276,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle010</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -1387,7 +1387,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -1725,7 +1725,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -1836,7 +1836,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle015</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -1952,7 +1952,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle010</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -1961,6 +1961,117 @@
       </MultiGeometry>
     </Placemark>
     <Placemark id="ID_00017">
+      <name>GILPIN</name>
+      <Snippet></Snippet>
+      <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+<td>GILPIN</td>
+</tr>
+<tr>
+<td>
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100%;border-spacing:0px; padding:3px 3px 3px 3px">
+<tr>
+<td>FID</td>
+<td>17</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>COUNTY</td>
+<td>GILPIN</td>
+</tr>
+<tr>
+<td>CO_FIPS</td>
+<td>47</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>SHAPE_AREA</td>
+<td>388.687899</td>
+</tr>
+<tr>
+<td>County_1</td>
+<td>GILPIN</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>Recreation</td>
+<td>1.33</td>
+</tr>
+<tr>
+<td>SocioEcon</td>
+<td>2.6</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>Environmen</td>
+<td>1.52</td>
+</tr>
+<tr>
+<td>Energy</td>
+<td>0</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>StateAsset</td>
+<td>1.74</td>
+</tr>
+<tr>
+<td>Livestock</td>
+<td>1</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>Crops</td>
+<td>1</td>
+</tr>
+<tr>
+<td>overall</td>
+<td>0</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>livestock_</td>
+<td>1</td>
+</tr>
+<tr>
+<td>crop_round</td>
+<td>1</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>overall_ro</td>
+<td>0</td>
+</tr>
+<tr>
+<td>rec_round</td>
+<td>1</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>env_round</td>
+<td>2</td>
+</tr>
+<tr>
+<td>state_roun</td>
+<td>2</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>SocEco_rou</td>
+<td>3</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+]]></description>
+      <styleUrl>#PolyStyle00</styleUrl>
+      <MultiGeometry>
+        <Polygon>
+          <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
+          <outerBoundaryIs><LinearRing><coordinates> -105.6755129286908,39.93327383657687,0 -105.6755037876664,39.93267924434831,0 -105.6777867767587,39.93083242204273,0 -105.6776775619885,39.93021589395612,0 -105.6775365465191,39.92941484631992,0 -105.6766063818575,39.92869498217553,0 -105.6775367431088,39.92839673348158,0 -105.6789266184478,39.92763628459417,0 -105.680206576238,39.92630433836665,0 -105.6802868242099,39.9252857646569,0 -105.6807566168851,39.92453519043352,0 -105.6811665657894,39.92361378578555,0 -105.6816967784896,39.92305656292589,0 -105.6820466181912,39.92223461452318,0 -105.682506435038,39.92162374610931,0 -105.6825165790801,39.92080379522027,0 -105.6828768334044,39.91801313702306,0 -105.6822866332256,39.91749403853601,0 -105.6830065313755,39.91719248149293,0 -105.6840570207197,39.91656460981238,0 -105.6857469755275,39.91582482845442,0 -105.6862771019668,39.91541625322105,0 -105.686417020475,39.9147441923097,0 -105.6863470079023,39.91388416614434,0 -105.6865570698975,39.91291437074958,0 -105.6874171581452,39.91230561424884,0 -105.6880371066926,39.91152258437246,0 -105.6880371603134,39.90984676191675,0 -105.6883170470603,39.9092459418631,0 -105.6885871617898,39.90832533907535,0 -105.6887270325229,39.90765327494289,0 -105.6879971687482,39.90599529139227,0 -105.6878769775015,39.90538333791494,0 -105.6874870136013,39.90477298385631,0 -105.6875570274476,39.90380400644509,0 -105.6884603245749,39.90339770963581,0 -105.6892271729677,39.90305528650612,0 -105.6904171905695,39.90178682786716,0 -105.6905769996291,39.90117320945172,0 -105.691247356065,39.89923661028288,0 -105.6919073058514,39.89841277150872,0 -105.6912575054543,39.89733546973547,0 -105.6923174222432,39.89688315819085,0 -105.694057481876,39.89616548559592,0 -105.6953074871614,39.89528403844824,0 -105.697307631807,39.89448366950926,0 -105.6980275409278,39.89392522914436,0 -105.6983673692953,39.89326546476745,0 -105.6989075257947,39.89275316133713,0 -105.6992374713583,39.89209345389832,0 -105.6997874828975,39.89147295719094,0 -105.699587435449,39.89056416717008,0 -105.6997875709372,39.88979261808232,0 -105.6997973794179,39.8891753885754,0 -105.6991374384543,39.88789545643247,0 -105.699357614201,39.88708324733054,0 -105.6993672633785,39.88544338875717,0 -105.6983622432881,39.88418807108859,0 -105.6983173361232,39.88318373884005,0 -105.6984672946797,39.88186289409977,0 -105.6983973595675,39.88098485157627,0 -105.7005378057206,39.87936367548382,0 -105.7008778064735,39.87880300830916,0 -105.700347836707,39.87818453584057,0 -105.700227712406,39.87722570885538,0 -105.6996277232423,39.87633284692132,0 -105.6995776466777,39.87557632163995,0 -105.699367756025,39.87462703898128,0 -105.6991076188202,39.8738042077409,0 -105.6971872007641,39.87191467934624,0 -105.6968574598368,39.87103369331206,0 -105.6970573860452,39.87006392438848,0 -105.6974672066831,39.86914695819787,0 -105.6977275564945,39.86750559596685,0 -105.6972077501934,39.86636446938513,0 -105.6963470997478,39.86457667020733,0 -105.696557159723,39.86334555608693,0 -105.6963570833117,39.86216645795809,0 -105.6960873447549,39.86150585257357,0 -105.6956373790226,39.86072469001127,0 -105.6938572709633,39.85846485406535,0 -105.6935872356617,39.85744384292354,0 -105.693657205971,39.85673614831926,0 -105.692996978279,39.85585712468392,0 -105.692737061565,39.85478649714184,0 -105.6915971391398,39.85353642063005,0 -105.6906669440448,39.85210487875013,0 -105.6892769069002,39.85133378572733,0 -105.6886870391329,39.8509768971418,0 -105.6879767414355,39.85015669934246,0 -105.687066995744,39.84955392115268,0 -105.685346981202,39.84883429726238,0 -105.6842864092028,39.84867386926036,0 -105.6827065914148,39.84786777855183,0 -105.6814564130873,39.84740661550308,0 -105.6791362465457,39.8471949742062,0 -105.6774162831898,39.84724557990724,0 -105.6768163687448,39.84775363296468,0 -105.6768061555146,39.84842493288755,0 -105.6763462798098,39.84913489284318,0 -105.6756762163272,39.84949468766531,0 -105.6747558184639,39.84965772018077,0 -105.6720457566512,39.84801563003717,0 -105.6705955867286,39.84775372334106,0 -105.6685556417126,39.84765737629895,0 -105.6676157510197,39.84750511410682,0 -105.6654153614731,39.84887375441687,0 -105.6638952949204,39.84969786328987,0 -105.6628253035922,39.84999680209025,0 -105.6617872948684,39.85019681018213,0 -105.6607050243808,39.85040533690177,0 -105.6606058077962,39.85039919765853,0 -105.6599049134725,39.85035582583804,0 -105.6581851026625,39.84989708259211,0 -105.6544046344599,39.84912560146694,0 -105.6536147490193,39.84876515044876,0 -105.6516946769099,39.84809569805456,0 -105.6505746604278,39.8472775798329,0 -105.6501144365508,39.84681614780722,0 -105.6490545786348,39.84625446053142,0 -105.6481945249905,39.84615565007157,0 -105.6468743994614,39.84615401433895,0 -105.6448539746527,39.84641753447489,0 -105.6441339484381,39.84621430540658,0 -105.643334080253,39.84610612001299,0 -105.6404237174495,39.84482479180057,0 -105.6391638309174,39.84477768395014,0 -105.6379638075228,39.84456804629723,0 -105.6365736487405,39.84445405416771,0 -105.6326731208956,39.84327706739248,0 -105.6327432754369,39.84220450017312,0 -105.6324831232503,39.84159774683974,0 -105.6319633954386,39.84056443173714,0 -105.6309132979663,39.83928623037005,0 -105.6313833438159,39.83764836679608,0 -105.6311934068585,39.83692860358117,0 -105.6297530025646,39.83549483787003,0 -105.6285632320018,39.83410474764869,0 -105.6282429767442,39.83354786334461,0 -105.6280432343836,39.83242720424057,0 -105.6274528721054,39.83180420671628,0 -105.6255727878081,39.83111608316301,0 -105.6248727561465,39.83063782315088,0 -105.6236227451847,39.83007692482833,0 -105.6231526201819,39.82925503359845,0 -105.6222327179092,39.82925546845838,0 -105.6209825969039,39.8286359740209,0 -105.6203225009823,39.82816648640146,0 -105.6193324005186,39.82770776186432,0 -105.6173624465235,39.82597482872141,0 -105.6163123589742,39.82545782937689,0 -105.6159223870014,39.8248472237704,0 -105.6151324477544,39.82397744208993,0 -105.6131419480492,39.82294732479848,0 -105.6113519554991,39.82471822296392,0 -105.6079216648097,39.8230243487735,0 -105.6056117822982,39.82265801509821,0 -105.6047616785564,39.82194615244014,0 -105.6041118087774,39.82120621755907,0 -105.6028012206769,39.82023545006932,0 -105.6032011825499,39.81962519658706,0 -105.6028113795053,39.81880730541869,0 -105.6021513088756,39.81789621915165,0 -105.6004910432906,39.81839587160073,0 -105.5985111398827,39.81858629932965,0 -105.5968611380581,39.8190948609714,0 -105.5946711499125,39.82020531992886,0 -105.5939904853277,39.82070885927726,0 -105.5934006446239,39.82162639105849,0 -105.5918006135484,39.82273828844204,0 -105.590550707412,39.82303748847372,0 -105.5896207192814,39.82308726074761,0 -105.588880725682,39.82297839440081,0 -105.58724053908,39.82221635390742,0 -105.5855305121155,39.82195469539582,0 -105.583929915596,39.82275564619106,0 -105.5831402275595,39.8228587260502,0 -105.5815598257062,39.82259635741733,0 -105.5805699062335,39.82259681269585,0 -105.5779899398357,39.82222676808951,0 -105.5772698735538,39.82161767545678,0 -105.5765499306613,39.82110768565411,0 -105.5758998242353,39.82069645327795,0 -105.5752298805376,39.81987535663966,0 -105.5746499419345,39.81946828072632,0 -105.5741995335902,39.81865510438443,0 -105.574729675853,39.81799474982633,0 -105.5745897679721,39.81732869882748,0 -105.5748698394981,39.81636774491661,0 -105.5761399584568,39.81499643077817,0 -105.5764198581385,39.81388681115914,0 -105.5783999312946,39.81363819153572,0 -105.5796497919792,39.81308684898146,0 -105.5796699242598,39.81200554230365,0 -105.5787398266792,39.81154617827451,0 -105.5784198082822,39.81082697290817,0 -105.5786998201438,39.80899653575597,0 -105.5779896568663,39.80802700032999,0 -105.5782499314165,39.80680483863035,0 -105.5779996100402,39.80594563521652,0 -105.5779999085248,39.80532844291685,0 -105.577349832235,39.80472800463569,0 -105.5747097230433,39.80384912443631,0 -105.573209590811,39.80286544030154,0 -105.5724193138182,39.80260805354539,0 -105.5718291940179,39.8020973825659,0 -105.5716390447835,39.80148563974887,0 -105.5709793470057,39.80107893676409,0 -105.5698490428078,39.80101691042692,0 -105.5682091044888,39.80050687863074,0 -105.5658389375744,39.80023915324896,0 -105.5649290291796,39.80038774717963,0 -105.5640690997151,39.80017568486612,0 -105.563538801373,39.79951602691447,0 -105.5627589981906,39.79748804620932,0 -105.5619085047333,39.79681641629849,0 -105.5617186466619,39.79604697769129,0 -105.5611284666998,39.79528848002408,0 -105.5602786472842,39.79491867244201,0 -105.5592883145352,39.79522528777719,0 -105.55730828398,39.79496901378292,0 -105.55513833192,39.79392523735048,0 -105.5544982485915,39.79239659506236,0 -105.5540483322244,39.79163739046557,0 -105.5516780438168,39.79039628706831,0 -105.5497679777278,39.78886913626311,0 -105.548327743131,39.78844796987393,0 -105.5476675855253,39.78813574141878,0 -105.5461675059592,39.78720576021481,0 -105.5461677492396,39.78649847060603,0 -105.5484177673635,39.78507778511641,0 -105.549077583668,39.78406553807631,0 -105.5487479203013,39.78349945801327,0 -105.5486978371545,39.78247706010517,0 -105.5484275839161,39.78171698231764,0 -105.5453575448162,39.77868604653395,0 -105.5442476640219,39.7769973600196,0 -105.5442576940943,39.77618641177335,0 -105.5445175750792,39.77531571352901,0 -105.5451275094078,39.77399737980627,0 -105.5447377116377,39.7734766308269,0 -105.5438774228051,39.77367888395967,0 -105.5424875126351,39.77362682015688,0 -105.5413539787608,39.77370871133856,0 -105.5410874808445,39.77372796259821,0 -105.5393272147896,39.77213686437714,0 -105.5376771036888,39.77141921107481,0 -105.5365569866477,39.77110003406213,0 -105.5347668852394,39.77029738440199,0 -105.5315868975085,39.76966777336042,0 -105.5301963464011,39.76899837871944,0 -105.5288665564257,39.7688287485936,0 -105.526686382506,39.76881613173174,0 -105.5259565098536,39.76860770639895,0 -105.5241061722705,39.7676790312454,0 -105.5219862999335,39.7669993122074,0 -105.5210960322601,39.7660302195248,0 -105.5202356930986,39.76593045791053,0 -105.5193857380156,39.76565945788014,0 -105.5178555410213,39.76487791336243,0 -105.5167357105745,39.76476577586681,0 -105.5159455007796,39.76501706470878,0 -105.5119555617257,39.7658591617944,0 -105.5111652894837,39.76580857851513,0 -105.5100453904675,39.76553869841233,0 -105.5093851953101,39.76491989884264,0 -105.5081250960814,39.76408748518514,0 -105.5073952273419,39.76311758430923,0 -105.5062050511452,39.76330749258237,0 -105.5054151130499,39.76319830901868,0 -105.5042950558783,39.76329778779899,0 -105.5025648364201,39.76302597379487,0 -105.501364764003,39.76295908748866,0 -105.5001746748547,39.76291015558541,0 -105.499374580147,39.76295865302809,0 -105.4967043721228,39.76342061504312,0 -105.4955146375861,39.76377709522684,0 -105.495053404898,39.76377137037637,0 -105.4947042476135,39.76376703539345,0 -105.494124545387,39.76326044074321,0 -105.4943945685868,39.76239882254441,0 -105.496194578172,39.76126938272601,0 -105.4970146341624,39.76039640059575,0 -105.497014651774,39.75973866273065,0 -105.496234606655,39.75840849599616,0 -105.4972344403339,39.75788613854069,0 -105.4951141794677,39.75748073524584,0 -105.4931945173716,39.75680864806198,0 -105.4920045149672,39.75685874134426,0 -105.4910644267893,39.75716907449589,0 -105.4902643487562,39.75783019495828,0 -105.489464298296,39.75823902392249,0 -105.4886741459829,39.75844958655793,0 -105.4874836761607,39.75838701863974,0 -105.4862039669371,39.75855005552319,0 -105.4848839971042,39.75906014839052,0 -105.4833538113059,39.75924673073303,0 -105.481656738644,39.75900432531745,0 -105.4805035777119,39.75883959567361,0 -105.4789935481255,39.75893594162597,0 -105.4723032035656,39.75733702593907,0 -105.4717229688575,39.75687986627092,0 -105.4699329861223,39.75646815744692,0 -105.4692532323736,39.75671869088175,0 -105.4686028831211,39.75641046324646,0 -105.4672129972592,39.75635750640216,0 -105.46554287856,39.75645882399537,0 -105.4647428597972,39.75661969942709,0 -105.4633127424037,39.75684604675556,0 -105.4625527032968,39.75696633598616,0 -105.46209228911,39.75619779535737,0 -105.4611123915196,39.75558900573795,0 -105.4564022352874,39.75582837170099,0 -105.4547522623832,39.75577627851114,0 -105.4537022757233,39.75531636530226,0 -105.4527122648807,39.75459941994879,0 -105.4517920873409,39.75423810192034,0 -105.4510720237403,39.75362820624631,0 -105.4503420965904,39.75284715773724,0 -105.4482316449057,39.75315716758485,0 -105.4461717673045,39.75401656012694,0 -105.4427916380834,39.75493052411041,0 -105.4423988645136,39.75510563272412,0 -105.4412016451929,39.75563937039635,0 -105.4403000576001,39.75559406004649,0 -105.440201407799,39.75558910134816,0 -105.4394714291133,39.75552879599152,0 -105.4386716169445,39.75578860992113,0 -105.4381813903463,39.75580556111743,0 -105.4375015882743,39.75582906406998,0 -105.4366315842973,39.75571971349927,0 -105.4353212249849,39.75525611037269,0 -105.4345811188506,39.75520932878769,0 -105.431941014761,39.75519666158076,0 -105.430620874925,39.75473754417929,0 -105.4297607885342,39.75463711027248,0 -105.4290407267165,39.75493711261277,0 -105.4284307894125,39.75534932135164,0 -105.4275007254448,39.75590687785774,0 -105.4256608371792,39.7556974007648,0 -105.4240706633593,39.75527973951199,0 -105.4230202844667,39.75513940996437,0 -105.422760549961,39.75328876827447,0 -105.4224403752155,39.75247001258843,0 -105.4224501685189,39.75150589309922,0 -105.4226507251085,39.7508384087883,0 -105.423450644548,39.75017775316232,0 -105.4235407190361,39.74957825352259,0 -105.4233508954647,39.74865991418685,0 -105.4228308053066,39.74741840538661,0 -105.4223208542888,39.7466363779108,0 -105.4214007134022,39.74581979949354,0 -105.4206005735388,39.74607949051278,0 -105.4197905671567,39.74663655083227,0 -105.417590236428,39.74769866773531,0 -105.415319972992,39.74933765189267,0 -105.4140500737963,39.74973863744731,0 -105.4102600882564,39.74972956339572,0 -105.4098000110446,39.75026729743698,0 -105.4079997088191,39.75122871861511,0 -105.4069394415204,39.751376602882,0 -105.4067665008898,39.75135550854036,0 -105.4061494992882,39.75128025022485,0 -105.4054793439898,39.75095823006679,0 -105.4042993809055,39.75028658626786,0 -105.4034294970916,39.75017698620099,0 -105.4030094473322,39.74957927379028,0 -105.4022293839048,39.74885665546467,0 -105.3996592346084,39.74771674449799,0 -105.3980883253608,39.74710043987593,0 -105.3981194833467,39.74991599943365,0 -105.3980893802625,39.75412834858612,0 -105.3980792555665,39.79822838923452,0 -105.3980595864616,39.81070740185131,0 -105.3981397973566,39.82606474547066,0 -105.3980793902835,39.84052604393327,0 -105.3980595881338,39.85480696953047,0 -105.3981494561021,39.86618626471468,0 -105.3981494133165,39.86946589647938,0 -105.3981495814616,39.87265542277078,0 -105.3982097216988,39.87490319865811,0 -105.3980196935225,39.88343627943608,0 -105.3980797266629,39.89817632548754,0 -105.3980296055173,39.9129527584746,0 -105.3980795654722,39.92707559236003,0 -105.3980286192774,39.9336730334276,0 -105.3980197982785,39.93481527672039,0 -105.3989496724983,39.93471297398139,0 -105.4000097464945,39.93492555389317,0 -105.4004237804198,39.93495718177998,0 -105.4007997577441,39.93498589522347,0 -105.4015299180065,39.93463198363461,0 -105.4044704426408,39.93250444592221,0 -105.4052802614391,39.93214573013078,0 -105.4061404158466,39.93164266545446,0 -105.4084602604442,39.93201293428224,0 -105.4091904832515,39.93217253608476,0 -105.4105805978087,39.93222618924926,0 -105.4115705854237,39.93258306947277,0 -105.4120406931096,39.93315352885367,0 -105.412820317705,39.93386254039861,0 -105.4133404783508,39.9344823604069,0 -105.4142709778802,39.93418622149689,0 -105.4150207375972,39.93321498401338,0 -105.4149610490157,39.93235475270295,0 -105.4155010233453,39.93153292264806,0 -105.4163608383844,39.93092617413506,0 -105.417420836172,39.93058449382819,0 -105.4182911659586,39.92936502425447,0 -105.4189710959183,39.92865529587723,0 -105.4198211981914,39.92946310363206,0 -105.4207411462942,39.93074368343274,0 -105.4221209517142,39.93156306678721,0 -105.4233110954104,39.93157224415599,0 -105.4242313431387,39.93146526230893,0 -105.4261614153973,39.9310122039625,0 -105.4290715907038,39.9310825594323,0 -105.4298615797165,39.93143552098234,0 -105.4309117683135,39.93175597558466,0 -105.4321617223319,39.93272439115778,0 -105.4326215907669,39.93338489795934,0 -105.4346617976496,39.9346746874399,0 -105.4354516168509,39.9348744488599,0 -105.435971829175,39.93564283598765,0 -105.4372320018918,39.93595343856433,0 -105.4383022112121,39.93687290209041,0 -105.4384721287723,39.93753449004097,0 -105.4394022850311,39.93805353444767,0 -105.4401221991408,39.93835263531847,0 -105.441052179122,39.93815539035987,0 -105.4423123920192,39.93806499920929,0 -105.4433724869831,39.93791228092695,0 -105.4450424985626,39.93705445305731,0 -105.4465022943587,39.93700378958494,0 -105.4477724628138,39.936593450665,0 -105.4484323849171,39.93610437129653,0 -105.4487724366226,39.93558498302432,0 -105.4493630378261,39.93523582208556,0 -105.4514128325558,39.93447553642356,0 -105.4540129470259,39.93392479046917,0 -105.4553432002293,39.93244195968342,0 -105.4626234268531,39.93237259149525,0 -105.4664136250289,39.93238443934992,0 -105.4749742421815,39.93236320300826,0 -105.4821646103589,39.93236505960505,0 -105.5005554536716,39.93229612705483,0 -105.5190469166798,39.9321427481427,0 -105.5577493513048,39.93216574741697,0 -105.566169916664,39.93215646986773,0 -105.5726600023935,39.9321741589585,0 -105.6113323060905,39.93218392187786,0 -105.6257035183435,39.93211627105411,0 -105.6427843882154,39.93212645242863,0 -105.6755129286908,39.93327383657687,0</coordinates></LinearRing></outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+    <Placemark id="ID_00018">
       <name>EAGLE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2071,7 +2182,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00018">
+    <Placemark id="ID_00019">
       <name>SUMMIT</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2174,7 +2285,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle015</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -2182,7 +2293,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00019">
+    <Placemark id="ID_00020">
       <name>DENVER</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2285,7 +2396,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle019</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -2299,7 +2410,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00020">
+    <Placemark id="ID_00021">
       <name>JEFFERSON</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2402,7 +2513,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -2422,7 +2533,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00021">
+    <Placemark id="ID_00022">
       <name>CLEAR CREEK</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2525,7 +2636,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle019</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -2533,7 +2644,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00022">
+    <Placemark id="ID_00023">
       <name>ARAPAHOE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2636,7 +2747,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -2664,7 +2775,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00023">
+    <Placemark id="ID_00024">
       <name>KIT CARSON</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2767,7 +2878,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle010</styleUrl>
+      <styleUrl>#PolyStyle01</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -2775,7 +2886,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00024">
+    <Placemark id="ID_00025">
       <name>LINCOLN</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2878,7 +2989,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle010</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -2886,7 +2997,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00025">
+    <Placemark id="ID_00026">
       <name>ELBERT</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -2989,7 +3100,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -2997,7 +3108,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00026">
+    <Placemark id="ID_00027">
       <name>PARK</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3108,7 +3219,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00027">
+    <Placemark id="ID_00028">
       <name>DOUGLAS</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3219,7 +3330,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00028">
+    <Placemark id="ID_00029">
       <name>MESA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3322,7 +3433,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle01</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -3330,7 +3441,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00029">
+    <Placemark id="ID_00030">
       <name>PITKIN</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3433,7 +3544,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle015</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -3441,7 +3552,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00030">
+    <Placemark id="ID_00031">
       <name>LAKE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3552,7 +3663,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00031">
+    <Placemark id="ID_00032">
       <name>GUNNISON</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3655,7 +3766,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle019</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -3663,7 +3774,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00032">
+    <Placemark id="ID_00033">
       <name>DELTA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3766,7 +3877,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -3774,7 +3885,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00033">
+    <Placemark id="ID_00034">
       <name>EL PASO</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3885,7 +3996,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00034">
+    <Placemark id="ID_00035">
       <name>TELLER</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -3988,7 +4099,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -3996,7 +4107,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00035">
+    <Placemark id="ID_00036">
       <name>CHEYENNE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4099,7 +4210,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -4107,7 +4218,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00036">
+    <Placemark id="ID_00037">
       <name>CHAFFEE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4218,7 +4329,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00037">
+    <Placemark id="ID_00038">
       <name>MONTROSE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4321,7 +4432,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle019</styleUrl>
+      <styleUrl>#PolyStyle01</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -4329,7 +4440,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00038">
+    <Placemark id="ID_00039">
       <name>FREMONT</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4440,7 +4551,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00039">
+    <Placemark id="ID_00040">
       <name>KIOWA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4543,7 +4654,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle010</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -4551,7 +4662,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00040">
+    <Placemark id="ID_00041">
       <name>CROWLEY</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4654,7 +4765,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -4662,7 +4773,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00041">
+    <Placemark id="ID_00042">
       <name>PUEBLO</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4765,7 +4876,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -4773,7 +4884,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00042">
+    <Placemark id="ID_00043">
       <name>SAGUACHE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4884,7 +4995,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00043">
+    <Placemark id="ID_00044">
       <name>OURAY</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -4987,7 +5098,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -4995,7 +5106,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00044">
+    <Placemark id="ID_00045">
       <name>PROWERS</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5098,7 +5209,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -5106,7 +5217,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00045">
+    <Placemark id="ID_00046">
       <name>BENT</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5209,7 +5320,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -5217,7 +5328,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00046">
+    <Placemark id="ID_00047">
       <name>OTERO</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5320,7 +5431,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -5328,7 +5439,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00047">
+    <Placemark id="ID_00048">
       <name>CUSTER</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5439,7 +5550,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00048">
+    <Placemark id="ID_00049">
       <name>SAN MIGUEL</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5550,7 +5661,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00049">
+    <Placemark id="ID_00050">
       <name>HINSDALE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5661,7 +5772,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00050">
+    <Placemark id="ID_00051">
       <name>HUERFANO</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5764,7 +5875,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -5772,7 +5883,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00051">
+    <Placemark id="ID_00052">
       <name>SAN JUAN</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5875,7 +5986,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle019</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -5883,7 +5994,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00052">
+    <Placemark id="ID_00053">
       <name>MINERAL</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -5986,7 +6097,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle019</styleUrl>
+      <styleUrl>#PolyStyle015</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -5994,7 +6105,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00053">
+    <Placemark id="ID_00054">
       <name>DOLORES</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6097,7 +6208,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -6105,7 +6216,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00054">
+    <Placemark id="ID_00055">
       <name>RIO GRANDE</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6208,7 +6319,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -6216,7 +6327,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00055">
+    <Placemark id="ID_00056">
       <name>LAS ANIMAS</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6319,7 +6430,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -6327,7 +6438,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00056">
+    <Placemark id="ID_00057">
       <name>ALAMOSA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6438,7 +6549,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00057">
+    <Placemark id="ID_00058">
       <name>MONTEZUMA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6541,7 +6652,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -6549,7 +6660,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00058">
+    <Placemark id="ID_00059">
       <name>BACA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6652,7 +6763,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle010</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -6660,7 +6771,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00059">
+    <Placemark id="ID_00060">
       <name>LA PLATA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6771,7 +6882,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00060">
+    <Placemark id="ID_00061">
       <name>COSTILLA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6882,7 +6993,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00061">
+    <Placemark id="ID_00062">
       <name>ARCHULETA</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -6985,7 +7096,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle00</styleUrl>
+      <styleUrl>#PolyStyle02</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
@@ -6993,7 +7104,7 @@
         </Polygon>
       </MultiGeometry>
     </Placemark>
-    <Placemark id="ID_00062">
+    <Placemark id="ID_00063">
       <name>CONEJOS</name>
       <Snippet></Snippet>
       <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
@@ -7096,7 +7207,7 @@
 </body>
 </html>
 ]]></description>
-      <styleUrl>#PolyStyle01</styleUrl>
+      <styleUrl>#PolyStyle00</styleUrl>
       <MultiGeometry>
         <Polygon>
           <extrude>0</extrude><altitudeMode>clampToGround</altitudeMode>
