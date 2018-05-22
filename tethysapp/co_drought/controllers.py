@@ -912,7 +912,7 @@ def drought_vuln_map(request):
         source='TileArcGISRest',
         options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
         legend_title='States & Counties',
-        layer_options={'visible':True,'opacity':0.8},
+        layer_options={'visible':True,'opacity':0.2},
         legend_extent=[-112, 36.3, -98.5, 41.66])    
     
     ##### WMS Layers - Ryan
@@ -1081,7 +1081,7 @@ def drought_monitor_map(request):
         source='TileArcGISRest',
         options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
         legend_title='States & Counties',
-        layer_options={'visible':True,'opacity':0.8},
+        layer_options={'visible':False,'opacity':0.8},
         legend_extent=[-112, 36.3, -98.5, 41.66])    
     
     ##### WMS Layers - Ryan
@@ -1091,7 +1091,7 @@ def drought_monitor_map(request):
             source='ImageWMS',
             options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
                      'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
-            layer_options={'visible':False,'opacity':0.25},
+            layer_options={'visible':True,'opacity':0.2},
             legend_title='USDM',
             legend_classes=[usdm_legend],
             legend_extent=[-126, 24.5, -66.2, 49])
@@ -1110,7 +1110,7 @@ def drought_monitor_map(request):
     usdm_D4_8wk_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/D4_8wk_counties.kml'},
-        layer_options={'visible':False,'opacity':0.5},
+        layer_options={'visible':True,'opacity':0.5},
         legend_title='USDM D4 Counties',
         feature_selection=False,
         legend_classes=[usdm_county_wk_legend],
@@ -1126,7 +1126,7 @@ def drought_monitor_map(request):
     usdm_D2_8wk_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/D2_8wk_counties.kml'},
-        layer_options={'visible':True,'opacity':0.5},
+        layer_options={'visible':False,'opacity':0.5},
         legend_title='USDM D2+ Counties',
         feature_selection=False,
         legend_classes=[usdm_county_wk_legend],
