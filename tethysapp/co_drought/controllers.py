@@ -161,7 +161,7 @@ def drought_map(request):
                 
     # Define map view options
     drought_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
@@ -272,7 +272,7 @@ def drought_map_nwmforecast(request):
 
     # Define map view options
     drought_nwmfx_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
@@ -386,7 +386,7 @@ def drought_map_outlook(request):
 
     # Define map view options
     drought_outlook_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
@@ -642,7 +642,7 @@ def drought_veg_index_map(request):
             
     # Define map view options
     drought_veg_index_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
@@ -766,7 +766,7 @@ def drought_prec_map(request):
         
     # Define map view options
     drought_prec_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'FullScreen', 'ScaleLine', 'WMSLegend',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
@@ -874,7 +874,7 @@ def drought_fire_map(request):
         
     # Define map view options
     drought_fire_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
@@ -1043,7 +1043,7 @@ def drought_vuln_map(request):
         
     # Define map view options
     drought_vuln_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
@@ -1186,7 +1186,7 @@ def drought_monitor_map(request):
         
     # Define map view options
     drought_monitor_map_view_options = MapView(
-            height='630px',
+            height='100%',
             width='100%',
             controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
