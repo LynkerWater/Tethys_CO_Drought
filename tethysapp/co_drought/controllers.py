@@ -94,12 +94,12 @@ def drought_map(request):
                              image_url='/static/tethys_gizmos/data/swsi_legend.PNG')
     SWSI_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/SWSI_2018Apr.kml'},
+        options={'url': '/static/tethys_gizmos/data/SWSI_2018May.kml'},
         legend_title='SWSI',
         layer_options={'visible':False,'opacity':0.7},
         feature_selection=True,
         legend_classes=[swsi_legend],
-        legend_extent=[-110, 36, -101.5, 41.6])
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
     
     # NOAA Rest server for NWM streamflow      
     nwm_stream = MVLayer(
@@ -157,7 +157,7 @@ def drought_map(request):
 #        legend_title='SWSI',
 #        layer_options={'visible':True,'opacity':0.4},
 #        feature_selection=True,
-#        legend_extent=[-110, 36, -101.5, 41.6])  
+#        legend_extent=[-109.5, 36.5, -101.5, 41.6])  
                 
     # Define map view options
     drought_map_view_options = MapView(
@@ -479,12 +479,12 @@ def drought_index_map(request):
                              image_url='/static/tethys_gizmos/data/swsi_legend.PNG')
     SWSI_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/SWSI_2018Apr.kml'},
+        options={'url': '/static/tethys_gizmos/data/SWSI_2018May.kml'},
         legend_title='SWSI',
         layer_options={'visible':True,'opacity':0.7},
         feature_selection=True,
         legend_classes=[swsi_legend],
-        legend_extent=[-110, 36, -101.5, 41.6])
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
         
     # NCDC/NIDIS precip index
     ncdc_pindex = MVLayer(
@@ -947,7 +947,7 @@ def drought_vuln_map(request):
         legend_title='Ag Risk Score',
         feature_selection=True,
         legend_classes=[vuln_legend],
-        legend_extent=[-126, 24.5, -66.2, 49])
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
     energy_vuln_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/CO_Energy_vuln_score_2018.kml'},
@@ -955,7 +955,7 @@ def drought_vuln_map(request):
         legend_title='Energy Risk Score',
         feature_selection=False,
         legend_classes=[energy_vuln_legend],
-        legend_extent=[-126, 24.5, -66.2, 49])
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
     environ_vuln_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/CO_Environ_vuln_score_2018.kml'},
@@ -963,7 +963,7 @@ def drought_vuln_map(request):
         legend_title='Environ Risk Score',
         feature_selection=True,
         legend_classes=[vuln_legend],
-        legend_extent=[-126, 24.5, -66.2, 49])
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
     rec_vuln_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/CO_Rec_vuln_score_2018.kml'},
@@ -971,7 +971,7 @@ def drought_vuln_map(request):
         legend_title='Recreation Risk Score',
         feature_selection=True,
         legend_classes=[vuln_legend],
-        legend_extent=[-126, 24.5, -66.2, 49])
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
     socecon_vuln_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/CO_SocEcon_vuln_score_2018.kml'},
@@ -979,7 +979,7 @@ def drought_vuln_map(request):
         legend_title='Socioecon Risk Score',
         feature_selection=True,
         legend_classes=[vuln_legend],
-        legend_extent=[-126, 24.5, -66.2, 49])
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
     state_vuln_kml = MVLayer(
         source='KML',
         options={'url': '/static/tethys_gizmos/data/CO_StateAssets_vuln_score_2018.kml'},
@@ -987,7 +987,7 @@ def drought_vuln_map(request):
         legend_title='State Assets Risk Score',
         feature_selection=True,
         legend_classes=[vuln_legend],
-        legend_extent=[-126, 24.5, -66.2, 49])
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
         
     # Define GeoJSON layer
     # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
