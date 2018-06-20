@@ -94,7 +94,7 @@ def drought_map(request):
                              image_url='/static/tethys_gizmos/data/swsi_legend.PNG')
     SWSI_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/SWSI_2018May.kml'},
+        options={'url': '/static/tethys_gizmos/data/SWSI_2018Current.kml'},
         legend_title='SWSI',
         layer_options={'visible':False,'opacity':0.7},
         feature_selection=True,
@@ -479,7 +479,7 @@ def drought_index_map(request):
                              image_url='/static/tethys_gizmos/data/swsi_legend.PNG')
     SWSI_kml = MVLayer(
         source='KML',
-        options={'url': '/static/tethys_gizmos/data/SWSI_2018May.kml'},
+        options={'url': '/static/tethys_gizmos/data/SWSI_2018Current.kml'},
         legend_title='SWSI',
         layer_options={'visible':True,'opacity':0.7},
         feature_selection=True,
@@ -1018,7 +1018,7 @@ def drought_vuln_map(request):
         options=data_sd,
         legend_title='Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
-        feature_selection=True,
+        feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
         layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
 
@@ -1027,7 +1027,7 @@ def drought_vuln_map(request):
         options=data_md,
         legend_title='',
         legend_extent=[-112, 36.3, -98.5, 41.66],
-        feature_selection=True,
+        feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
         layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
 
@@ -1036,7 +1036,7 @@ def drought_vuln_map(request):
         options=data_ml,
         legend_title='',
         legend_extent=[-112, 36.3, -98.5, 41.66],
-        feature_selection=True,
+        feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
         layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
 
@@ -1161,7 +1161,7 @@ def drought_monitor_map(request):
         options=data_sd,
         legend_title='Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
-        feature_selection=False,
+        feature_selection=True,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
         layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
 
@@ -1170,7 +1170,7 @@ def drought_monitor_map(request):
         options=data_md,
         legend_title='',
         legend_extent=[-112, 36.3, -98.5, 41.66],
-        feature_selection=False,
+        feature_selection=True,
         legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
         layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
 
@@ -1179,7 +1179,7 @@ def drought_monitor_map(request):
         options=data_ml,
         legend_title='',
         legend_extent=[-112, 36.3, -98.5, 41.66],
-        feature_selection=False,
+        feature_selection=True,
         legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
         layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
 
@@ -1202,7 +1202,70 @@ def drought_monitor_map(request):
     }
 
     return render(request, 'co_drought/drought_monitor.html', context)
-##################### End Drought Monitor Map #############################################
+##################### End Drought Monitor Maps #############################################
+####################### Test Bokeh Plotting #############################################
+from tethys_sdk.gizmos import BokehView
+from bokeh.plotting import figure
+from bokeh.models import ColumnDataSource, HoverTool, Range1d
+from bokeh.layouts import gridplot
+from bokeh.models.widgets import Div
+## plotting example here: http://bokeh.pydata.org/en/latest/docs/gallery/bar_colormapped.html
+@login_required()
+def drought_bokeh_plot(request):
+###############################
+    vuln_data = [2.2,3.1,3.9,1.5,1.8]
+    sector_names = ['Recreation','Socio Econ','Environmental','Energy','State Assets']    
+    source = ColumnDataSource(data=dict(sectors=sector_names, vuln_risk=vuln_data))
+    plot = figure(x_range=sector_names,plot_width=700,plot_height=300,title="County Drought Vulnerability Risk Score",
+                  tools="save",y_range = Range1d(start=0,end=4,bounds=(0,4)))
+    plot.vbar(x='sectors',top='vuln_risk',source=source,width=0.7, bottom=0,fill_color=['blue','green','yellow','orange','red'])
+    hover = HoverTool(tooltips=[
+                    ("Score",'@vuln_risk{0.2f}')],
+                    mode='mouse') #("Date","@x")],           
+    plot.add_tools(hover)
+    ###############################
+    pdsi = [-1.21,-2.07,-0.14,0.23,-0.14,0.11,0.11,0.14,0.58,0.48,-0.37,-0.55]
+    palmz = [0.5,0.88,1.23,0.64,-0.25,-2.09,-2.78,-2.38,-2.04,-1.08,-1.39,-0.31]
+    dates = ["6/1/2017","7/1/2017","8/1/2017","9/1/2017","10/1/2017","11/1/2017","12/1/2017","1/1/2018","2/1/2018","3/1/2018","4/1/2018","5/1/2018"]
+    dates_list = [datetime.datetime.strptime(date, '%m/%d/%Y').date() for date in dates]
+    source_pdsi = ColumnDataSource(data=dict(dates=dates_list, pdsi=pdsi))
+    source_palmz = ColumnDataSource(data=dict(dates=dates_list, palmz=palmz))
+    plot2 = figure(x_axis_type="datetime",plot_width=700,plot_height=300,title="Drought Indices",
+                  tools="save")
+    plot2.line(x='dates',y='pdsi',source=source_pdsi,line_width=3,legend='PDSI',color='blue',name='pdsi_plot')
+    plot2.line(x='dates',y='palmz',source=source_palmz,line_width=3,legend='Palmer-Z',color='green',name='palmz_plot')
+    hover_pdsi = HoverTool(tooltips=[
+                    ("PDSI",'@pdsi{0.2f}')],names=['pdsi_plot'],
+                    mode='mouse')   
+    hover_palmz = HoverTool(tooltips=[
+                    ("Palm-Z",'@palmz{0.2f}')],names=['palmz_plot'],
+                    mode='mouse')   
+    plot2.add_tools(hover_pdsi,hover_palmz)
+    ###############################
+    today_wk = datetime.datetime.now().date()
+    start_yr = datetime.date(today_wk.year,1,1)
+    max_weeks = ((today_wk-start_yr).days+7)/7
+    usdm_cat_data = [24,21,20,8] # D1+, D2+, D3+, D4
+    usdm_cats = ['D1+','D2+','D3+','D4']    
+    source_usdm = ColumnDataSource(data=dict(cats=usdm_cats, cat_data=usdm_cat_data))
+    plot3 = figure(y_range=usdm_cats,plot_width=400,plot_height=300,title=str(today_wk.year) +" USDM Weeks in Drought (Consecutive)",
+                  tools="save",x_range = Range1d(start=0,end=max_weeks,bounds=(0,max_weeks)))
+    plot3.hbar(height=0.5, left=0,y='cats',right='cat_data',source=source_usdm,fill_color=['#FCD37F','#FFAA00','#E60000','#730000'])
+    hover_usdm = HoverTool(tooltips=[
+                    ("#Weeks",'@cat_data')],
+                    mode='mouse') #("Date","@x")],           
+    plot3.add_tools(hover_usdm)
+    ###############################
+    # bokeh widget for html text paragraph: https://bokeh.pydata.org/en/latest/docs/user_guide/interaction/widgets.html
+    div = Div(text="""<b>Local Water Use Restrictions:</b><br><i>Example - Level 2 residential water use restriction<br></i><br>
+            <b>Fire/Burn Restrictions:</b><br><i>Example - County-wide burn ban</i><br><br>
+            <b>Colorado Drought Plan Activation:</b><br><i>Example - Agricultural Sector</i>""",
+    width=400, height=200)
+    
+    my_bokeh_view = BokehView(gridplot([plot,plot3],[plot2,div]))
+    context = {'bokeh_view_input': my_bokeh_view}
+    return render(request, 'co_drought/drought_bokeh_plot.html', context)
+#########################################################################################
 #########################################################################################
 @login_required()
 def drought_4pane(request):

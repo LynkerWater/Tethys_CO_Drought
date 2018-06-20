@@ -1,6 +1,10 @@
 {% extends "co_drought/base.html" %}
 {% load tethys_gizmos staticfiles %}
 
+{% block import_gizmos %}
+    {% import_gizmo_dependency bokeh_view %}
+{% endblock %}
+
 {% block app_content %}
   {% gizmo map_view_options %}
 {% endblock %}

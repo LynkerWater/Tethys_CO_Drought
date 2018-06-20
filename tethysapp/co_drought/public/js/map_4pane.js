@@ -67,6 +67,17 @@ $(function()
 		  visible: true,
           opacity: 0.6
       })
+        var WPC_5day_QPF = new ol.layer.Tile({
+          extent: [-13884991, 2870341, -7455066, 6338219],
+          source: new ol.source.TileArcGISRest({
+            url: 'https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/wpc_qpf/MapServer',
+            params: {'LAYERS': 'show:10'},
+            ratio: 1,
+            attributions: 'WPC QPF'
+          }),
+		  visible: true,
+          opacity: 0.5
+      })
       var ncep_month_outlook_layer = new ol.layer.Tile({
           extent: [-13884991, 2870341, -7455066, 6338219],
           source: new ol.source.TileArcGISRest({
@@ -130,7 +141,7 @@ $(function()
       });
 	  var map4 = new ol.Map({
         target: 'map4',
-        layers: [layer,snodas_layer,tiger_county_state],
+        layers: [layer,snodas_layer,WPC_5day_QPF,tiger_county_state],
         controls: new ol.Collection(),
         view: view
       });
