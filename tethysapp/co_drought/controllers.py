@@ -1212,20 +1212,25 @@ from bokeh.models.widgets import Div
 ## plotting example here: http://bokeh.pydata.org/en/latest/docs/gallery/bar_colormapped.html
 @login_required()
 def drought_bokeh_plot(request):
-###############################
+    ###############################
     vuln_data = [2.2,3.1,3.9,1.5,1.8]
-    sector_names = ['Recreation','Socio Econ','Environmental','Energy','State Assets']    
-    source = ColumnDataSource(data=dict(sectors=sector_names, vuln_risk=vuln_data))
+    sector_names = ['Recreation','Socio Econ','Environmental','Energy','State Assets']
+    fill_color=['blue','green','yellow','orange','red'] 
+    # NOTE: all interval plot variables must be based to source or don't use source at all
+    # https://github.com/bokeh/bokeh/issues/2056
+    source = ColumnDataSource(data=dict(sectors=sector_names, vuln_risk=vuln_data,fill_color=fill_color))
     plot = figure(x_range=sector_names,plot_width=700,plot_height=300,title="County Drought Vulnerability Risk Score",
                   tools="save",y_range = Range1d(start=0,end=4,bounds=(0,4)))
-    plot.vbar(x='sectors',top='vuln_risk',source=source,width=0.7, bottom=0,fill_color=['blue','green','yellow','orange','red'])
+    plot.vbar(x='sectors',top='vuln_risk',source=source,width=0.7, bottom=0,fill_color='fill_color')
     hover = HoverTool(tooltips=[
                     ("Score",'@vuln_risk{0.2f}')],
                     mode='mouse') #("Date","@x")],           
     plot.add_tools(hover)
+    
     ###############################
     pdsi = [-1.21,-2.07,-0.14,0.23,-0.14,0.11,0.11,0.14,0.58,0.48,-0.37,-0.55]
-    palmz = [0.5,0.88,1.23,0.64,-0.25,-2.09,-2.78,-2.38,-2.04,-1.08,-1.39,-0.31]
+    palmz = [0.5,0.88,1.23,0.64,-0.25,-2.09,-2.78,-2.38,
+    -2.04,-1.08,-1.39,-0.31]
     dates = ["6/1/2017","7/1/2017","8/1/2017","9/1/2017","10/1/2017","11/1/2017","12/1/2017","1/1/2018","2/1/2018","3/1/2018","4/1/2018","5/1/2018"]
     dates_list = [datetime.datetime.strptime(date, '%m/%d/%Y').date() for date in dates]
     source_pdsi = ColumnDataSource(data=dict(dates=dates_list, pdsi=pdsi))
@@ -1245,12 +1250,13 @@ def drought_bokeh_plot(request):
     today_wk = datetime.datetime.now().date()
     start_yr = datetime.date(today_wk.year,1,1)
     max_weeks = ((today_wk-start_yr).days+7)/7
-    usdm_cat_data = [24,21,20,8] # D1+, D2+, D3+, D4
+    usdm_cat_data = [25,21,20,8] # D1+, D2+, D3+, D4
     usdm_cats = ['D1+','D2+','D3+','D4']    
-    source_usdm = ColumnDataSource(data=dict(cats=usdm_cats, cat_data=usdm_cat_data))
+    usdm_colors=['#FCD37F','#FFAA00','#E60000','#730000']
+    source_usdm = ColumnDataSource(data=dict(cats=usdm_cats, cat_data=usdm_cat_data,usdm_colors=usdm_colors))
     plot3 = figure(y_range=usdm_cats,plot_width=400,plot_height=300,title=str(today_wk.year) +" USDM Weeks in Drought (Consecutive)",
                   tools="save",x_range = Range1d(start=0,end=max_weeks,bounds=(0,max_weeks)))
-    plot3.hbar(height=0.5, left=0,y='cats',right='cat_data',source=source_usdm,fill_color=['#FCD37F','#FFAA00','#E60000','#730000'])
+    plot3.hbar(height=0.5, left=0,y='cats',right='cat_data',source=source_usdm,fill_color='usdm_colors')
     hover_usdm = HoverTool(tooltips=[
                     ("#Weeks",'@cat_data')],
                     mode='mouse') #("Date","@x")],           
