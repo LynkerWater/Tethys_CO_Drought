@@ -9,12 +9,12 @@ class DamInventory(TethysAppBase):
     """
 
     name = 'Colorado Drought Monitoring Tool - Beta'
-    index = 'co_drought:drought'
+    index = 'co_drought:drought_monitor'
     icon = 'co_drought/images/drought_logo.png'
     package = 'co_drought'
     root_url = 'co-drought'
     color = '#0063bf'
-    description = 'Lynker prototype drought monitoring tool for Colorado Drought Plan'
+    description = 'Lynker prototype drought monitoring tool with drought risk info from the Colorado Drought Plan'
     tags = ''
     enable_feedback = False
     feedback_emails = []

@@ -712,6 +712,19 @@ def drought_prec_map(request):
         legend_title='7-day % of Norm',
         layer_options={'visible':False,'opacity':0.6},
         legend_extent=[-112, 36.3, -98.5, 41.66])
+        
+    ##### USGS WMS Precip Layers
+    precip30_legend = MVLegendImageClass(value='Previous 30-day Precip',
+                     image_url='https://vegdri.cr.usgs.gov/wms.php?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&LAYER=PRECIP_TP30')   
+    precip30 = MVLayer(
+            source='ImageWMS',
+            options={'url': 'https://vegdri.cr.usgs.gov/wms.php?',
+                     'params': {'LAYERS': 'PRECIP_TP30'},
+                   'serverType': 'geoserver'},
+            layer_options={'visible':True,'opacity':0.4},
+            legend_title='30-day Total Precip',
+            legend_classes=[precip30_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
 
     # NEXRAD Radar reflectivity  
     nexrad_legend = MVLegendImageClass(value='Base Reflectivity',
@@ -771,7 +784,7 @@ def drought_prec_map(request):
             controls=['ZoomSlider', 'Rotate', 'FullScreen', 'ScaleLine', 'WMSLegend',
                       {'MousePosition': {'projection': 'EPSG:4326'}},
                       {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-112, 36.3, -98.5, 41.66]}}],
-            layers=[tiger_boundaries,snodas_swe,nws_prec7,nexrad,watersheds],
+            layers=[tiger_boundaries,snodas_swe,precip30,nexrad,watersheds],
             view=view_options,
             basemap='OpenStreetMap',
             legend=True
@@ -1206,21 +1219,26 @@ def drought_monitor_map(request):
 ####################### Test Bokeh Plotting #############################################
 from tethys_sdk.gizmos import BokehView
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, HoverTool, Range1d
+from bokeh.models import ColumnDataSource, HoverTool, Range1d, CustomJS, Select
 from bokeh.layouts import gridplot
 from bokeh.models.widgets import Div
+from tethys_sdk.gizmos import MessageBox
+import pandas as pd
 ## plotting example here: http://bokeh.pydata.org/en/latest/docs/gallery/bar_colormapped.html
 @login_required()
 def drought_bokeh_plot(request):
     ###############################
-    vuln_data = [2.2,3.1,3.9,1.5,1.8]
-    sector_names = ['Recreation','Socio Econ','Environmental','Energy','State Assets']
-    fill_color=['blue','green','yellow','orange','red'] 
-    # NOTE: all interval plot variables must be based to source or don't use source at all
-    # https://github.com/bokeh/bokeh/issues/2056
-    source = ColumnDataSource(data=dict(sectors=sector_names, vuln_risk=vuln_data,fill_color=fill_color))
-    plot = figure(x_range=sector_names,plot_width=700,plot_height=300,title="County Drought Vulnerability Risk Score",
-                  tools="save",y_range = Range1d(start=0,end=4,bounds=(0,4)))
+    app_workspace = app.get_app_workspace()
+    vuln_csv = os.path.join(app_workspace.path, 'All_vulnerability_Ranks.csv')
+    vuln_read = pd.read_csv(vuln_csv,sep=',',header=0,index_col='County')
+    counties = vuln_read.index.tolist()
+    vuln_dic = vuln_read.T.to_dict('list')
+    county = 'BOULDER'
+    sector_names = ['Recreation','Socio Econ','Environmental','Energy','State Assets','Ag']
+    fill_color=['blue','green','yellow','orange','red','purple']    
+    source = ColumnDataSource(data=dict(sectors=sector_names, vuln_risk=vuln_dic[county],fill_color=fill_color))
+    plot = figure(x_range=sector_names,plot_width=700,plot_height=300,title="Colorado Drought Plan - County Drought Vulnerability Risk Score",
+                  y_axis_label='Vulnerability Score',tools="save",y_range = Range1d(start=0,end=4,bounds=(0,4)))
     plot.vbar(x='sectors',top='vuln_risk',source=source,width=0.7, bottom=0,fill_color='fill_color')
     hover = HoverTool(tooltips=[
                     ("Score",'@vuln_risk{0.2f}')],
@@ -1235,8 +1253,8 @@ def drought_bokeh_plot(request):
     dates_list = [datetime.datetime.strptime(date, '%m/%d/%Y').date() for date in dates]
     source_pdsi = ColumnDataSource(data=dict(dates=dates_list, pdsi=pdsi))
     source_palmz = ColumnDataSource(data=dict(dates=dates_list, palmz=palmz))
-    plot2 = figure(x_axis_type="datetime",plot_width=700,plot_height=300,title="Drought Indices",
-                  tools="save")
+    plot2 = figure(x_axis_type="datetime",plot_width=700,plot_height=300,title="Monthly Drought Indices (Example Data)",
+                  tools="save",y_axis_label='Index Value')
     plot2.line(x='dates',y='pdsi',source=source_pdsi,line_width=3,legend='PDSI',color='blue',name='pdsi_plot')
     plot2.line(x='dates',y='palmz',source=source_palmz,line_width=3,legend='Palmer-Z',color='green',name='palmz_plot')
     hover_pdsi = HoverTool(tooltips=[
@@ -1247,31 +1265,121 @@ def drought_bokeh_plot(request):
                     mode='mouse')   
     plot2.add_tools(hover_pdsi,hover_palmz)
     ###############################
+    ## USDM data: http://droughtmonitor.unl.edu/Data/DataDownload/WeeksInDrought.aspx
+    usdm_csv = os.path.join(app_workspace.path, 'usdm_county_count_accum.csv')
+    usdm_df = pd.read_csv(usdm_csv,sep=',',header=0,index_col='COUNTYNAME')
+    usdm_dic = usdm_df.T.to_dict('list')
     today_wk = datetime.datetime.now().date()
     start_yr = datetime.date(today_wk.year,1,1)
     max_weeks = ((today_wk-start_yr).days+7)/7
-    usdm_cat_data = [25,21,20,8] # D1+, D2+, D3+, D4
+    #usdm_cat_data = [25,21,20,8] # D1+, D2+, D3+, D4
     usdm_cats = ['D1+','D2+','D3+','D4']    
     usdm_colors=['#FCD37F','#FFAA00','#E60000','#730000']
-    source_usdm = ColumnDataSource(data=dict(cats=usdm_cats, cat_data=usdm_cat_data,usdm_colors=usdm_colors))
+    source_usdm = ColumnDataSource(data=dict(cats=usdm_cats, cat_data=usdm_dic[county],usdm_colors=usdm_colors))
     plot3 = figure(y_range=usdm_cats,plot_width=400,plot_height=300,title=str(today_wk.year) +" USDM Weeks in Drought (Consecutive)",
-                  tools="save",x_range = Range1d(start=0,end=max_weeks,bounds=(0,max_weeks)))
+                  y_axis_label='Drought Category',x_axis_label='# of Consective Weeks in Current Calendar Year',tools="save",x_range = Range1d(start=0,end=max_weeks,bounds=(0,max_weeks)))
     plot3.hbar(height=0.5, left=0,y='cats',right='cat_data',source=source_usdm,fill_color='usdm_colors')
     hover_usdm = HoverTool(tooltips=[
                     ("#Weeks",'@cat_data')],
                     mode='mouse') #("Date","@x")],           
     plot3.add_tools(hover_usdm)
+    ##############################
+    ## bokeh callback customjs for dropdown county plot changes
+    ## https://bokeh.pydata.org/en/latest/docs/user_guide/interaction/callbacks.html
+    vuln_data = ColumnDataSource(data=vuln_dic)
+    usdm_change_data = ColumnDataSource(data=usdm_dic)
+    callback = CustomJS(args=dict(source=source,change_data=vuln_data,source_usdm=source_usdm,change_usdm=usdm_change_data), code="""
+            var vuln_read = source.data;
+            var vuln_change = change_data.data 
+            var f = cb_obj.value;
+            var y = vuln_change[f];
+            var vuln_risk = vuln_read.vuln_risk
+            for (var i = 0; i < y.length; i++) {
+                vuln_risk[i] = y[i]}
+            var usdm_read = source_usdm.data;
+            var usdm_change = change_usdm.data
+            var y_usdm = usdm_change[f];
+            var cat_data = usdm_read.cat_data
+            for (var n = 0; n < y_usdm.length; n++) {
+                cat_data[n] = y_usdm[n]}
+            source.change.emit();
+            source_usdm.change.emit();
+        """)
+    select = Select(options=counties,value=counties[0],callback=callback)
+    ## add console output for debugging
+    #console.log(vuln_change)
+    #console.log(vuln_read.vuln_risk)
+    #console.log(f)
+    #console.log(vuln_read);
+    #console.log(vuln_read.vuln_risk);
+    #console.log(usdm_read.cat_data);
     ###############################
+    ###############################
+#@login_required()
+#def drought_bokeh_plot(request):
+#    ##############################
+#    from bokeh.layouts import gridplot
+#    from bokeh.models import CustomJS, ColumnDataSource, Slider
+#    from bokeh.plotting import figure, output_file, show
+#    
+#    output_file("callback.html")
+#    
+#    x = [x*0.005 for x in range(0, 200)]
+#    y = x
+#    
+#    source = ColumnDataSource(data=dict(x=x, y=y))
+#    
+#    plot = figure(plot_width=400, plot_height=400)
+#    plot.line('x', 'y', source=source, line_width=3, line_alpha=0.6)
+#    
+#    callback = CustomJS(args=dict(source=source), code="""
+#            var data = source.get('data');
+#            var f = cb_obj.get('value')
+#            x = data['x']
+#            y = data['y']
+#            for (i = 0; i < x.length; i++) {
+#                y[i] = Math.pow(x[i], f)
+#            }
+#            source.trigger('change');
+#        """)
+#    
+#    slider = Slider(start=0.1, end=4, value=1, step=.1, title="power", callback=callback)
+#    
+#    layout = gridplot([slider], [plot])
+#    my_bokeh_view = BokehView(layout)
+    ##############################
     # bokeh widget for html text paragraph: https://bokeh.pydata.org/en/latest/docs/user_guide/interaction/widgets.html
     div = Div(text="""<b>Local Water Use Restrictions:</b><br><i>Example - Level 2 residential water use restriction<br></i><br>
             <b>Fire/Burn Restrictions:</b><br><i>Example - County-wide burn ban</i><br><br>
             <b>Colorado Drought Plan Activation:</b><br><i>Example - Agricultural Sector</i>""",
     width=400, height=200)
     
-    my_bokeh_view = BokehView(gridplot([plot,plot3],[plot2,div]))
-    context = {'bokeh_view_input': my_bokeh_view}
+    #my_bokeh_view = BokehView(gridplot([plot,div],[plot2,plot3]))
+    my_bokeh_view = BokehView(gridplot([select,plot],[plot2,plot3]))
+    
+    message_box = MessageBox(name='WelcomeModal',
+                             title='Message Box Title',
+                             message='Congratulations! This is a message box.',
+                             dismiss_button='Nevermind',
+                             affirmative_button='Proceed',
+                             width=400,
+                             affirmative_attributes='href=javascript:void(0);',
+                             attributes={'style':"display: block;",'aria-hidden':"false"})
+
+    context = {'message_box': message_box,'bokeh_view_input': my_bokeh_view,}
     return render(request, 'co_drought/drought_bokeh_plot.html', context)
 #########################################################################################
+#from tethys_sdk.gizmos import MessageBox
+#def welcome_message(request):
+#    message_box = MessageBox(name='sampleModal',
+#                             title='Message Box Title',
+#                             message='Congratulations! This is a message box.',
+#                             dismiss_button='Nevermind',
+#                             affirmative_button='Proceed',
+#                             width=400,
+#                             affirmative_attributes='href=javascript:void(0);')
+#    context = {'message_box': message_box}
+#    return render(request, 'co_drought/message_box.html', context)
 #########################################################################################
 @login_required()
 def drought_4pane(request):
