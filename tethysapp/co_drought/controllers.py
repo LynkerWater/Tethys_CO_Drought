@@ -1224,12 +1224,13 @@ from bokeh.layouts import gridplot
 from bokeh.models.widgets import Div
 from tethys_sdk.gizmos import MessageBox
 import pandas as pd
+app_workspace = app.get_app_workspace()
+vuln_csv = os.path.join(app_workspace.path, 'All_Vulnerability_Ranks.csv')
+usdm_csv = os.path.join(app_workspace.path, 'usdm_county_count_accum.csv')
 ## plotting example here: http://bokeh.pydata.org/en/latest/docs/gallery/bar_colormapped.html
 @login_required()
 def drought_bokeh_plot(request):
     ###############################
-    app_workspace = app.get_app_workspace()
-    vuln_csv = os.path.join(app_workspace.path, 'All_vulnerability_Ranks.csv')
     vuln_read = pd.read_csv(vuln_csv,sep=',',header=0,index_col='County')
     counties = vuln_read.index.tolist()
     vuln_dic = vuln_read.T.to_dict('list')
@@ -1266,7 +1267,6 @@ def drought_bokeh_plot(request):
     plot2.add_tools(hover_pdsi,hover_palmz)
     ###############################
     ## USDM data: http://droughtmonitor.unl.edu/Data/DataDownload/WeeksInDrought.aspx
-    usdm_csv = os.path.join(app_workspace.path, 'usdm_county_count_accum.csv')
     usdm_df = pd.read_csv(usdm_csv,sep=',',header=0,index_col='COUNTYNAME')
     usdm_dic = usdm_df.T.to_dict('list')
     today_wk = datetime.datetime.now().date()
