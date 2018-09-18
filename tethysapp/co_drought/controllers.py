@@ -144,7 +144,7 @@ def drought_map(request):
     coco_geojson = MVLayer(
         source='GeoJSON',
         options=data,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=True,
         legend_classes=[MVLegendClass('point', 'point', fill='#696969')],
@@ -1029,7 +1029,7 @@ def drought_vuln_map(request):
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
         options=data_sd,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
@@ -1157,7 +1157,7 @@ def drought_ag_risk_map(request):
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
         options=data_sd,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
@@ -1284,7 +1284,7 @@ def drought_eng_risk_map(request):
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
         options=data_sd,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
@@ -1411,7 +1411,7 @@ def drought_env_risk_map(request):
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
         options=data_sd,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
@@ -1538,7 +1538,7 @@ def drought_rec_risk_map(request):
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
         options=data_sd,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
@@ -1665,7 +1665,7 @@ def drought_soc_risk_map(request):
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
         options=data_sd,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
@@ -1792,7 +1792,7 @@ def drought_state_risk_map(request):
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
         options=data_sd,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=False,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
@@ -1936,7 +1936,7 @@ def drought_monitor_map(request):
     cocojson_sevdry = MVLayer(
         source='GeoJSON',
         options=data_sd,
-        legend_title='Condition Monitor',
+        legend_title='CoCoRaHS Condition Monitor',
         legend_extent=[-112, 36.3, -98.5, 41.66],
         feature_selection=True,
         legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
