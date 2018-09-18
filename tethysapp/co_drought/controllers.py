@@ -23,7 +23,7 @@ if len(str(prevmonth)) == 1:
     prevmonth = '0' + str(prevmonth)
 if len(str(monthnow)) == 1:
     monthnow = '0' + str(monthnow)
-week8 = today - datetime.timedelta(weeks=8)
+week20 = today - datetime.timedelta(weeks=20)
         
 ############################## Drought Map Main ############################################
 @login_required()
@@ -1015,15 +1015,15 @@ def drought_vuln_map(request):
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
@@ -1143,15 +1143,15 @@ def drought_ag_risk_map(request):
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
@@ -1270,15 +1270,15 @@ def drought_eng_risk_map(request):
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
@@ -1397,15 +1397,15 @@ def drought_env_risk_map(request):
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
@@ -1524,15 +1524,15 @@ def drought_rec_risk_map(request):
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
@@ -1651,15 +1651,15 @@ def drought_soc_risk_map(request):
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
@@ -1778,15 +1778,15 @@ def drought_state_risk_map(request):
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
@@ -1922,15 +1922,15 @@ def drought_monitor_map(request):
     for element in data['features']:
         if 'Severely Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_sd[u'features'].append(element)
         if 'Moderately Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_md[u'features'].append(element)
         if 'Mildly Dry' in element['properties']['scalebar']:
             rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
-            if rdate >= week8:
+            if rdate >= week20:
                 data_ml[u'features'].append(element)
         
     cocojson_sevdry = MVLayer(
