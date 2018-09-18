@@ -8,7 +8,7 @@ class DamInventory(TethysAppBase):
     Tethys app class for Dam Inventory.
     """
 
-    name = 'Colorado Drought Monitoring Tool - Beta'
+    name = 'Colorado Drought Visualization Tool - Prototype'
     index = 'co_drought:drought_monitor'
     icon = 'co_drought/images/drought_logo.png'
     package = 'co_drought'
@@ -80,6 +80,36 @@ class DamInventory(TethysAppBase):
                 name='drought_bokeh_plot',
                 url='co-drought/drought_bokeh_plot',
                 controller='co_drought.controllers.drought_bokeh_plot'
+            ),
+            UrlMap(
+                name='drought_ag_risk_map',
+                url='co-drought/drought_ag_risk_map',
+                controller='co_drought.controllers.drought_ag_risk_map'
+            ),
+            UrlMap(
+                name='drought_eng_risk_map',
+                url='co-drought/drought_eng_risk_map',
+                controller='co_drought.controllers.drought_eng_risk_map'
+            ),
+            UrlMap(
+                name='drought_env_risk_map',
+                url='co-drought/drought_env_risk_map',
+                controller='co_drought.controllers.drought_env_risk_map'
+            ),
+            UrlMap(
+                name='drought_rec_risk_map',
+                url='co-drought/drought_rec_risk_map',
+                controller='co_drought.controllers.drought_rec_risk_map'
+            ),
+            UrlMap(
+                name='drought_soc_risk_map',
+                url='co-drought/drought_soc_risk_map',
+                controller='co_drought.controllers.drought_soc_risk_map'
+            ),
+            UrlMap(
+                name='drought_state_risk_map',
+                url='co-drought/drought_state_risk_map',
+                controller='co_drought.controllers.drought_state_risk_map'
             ),
             UrlMap(
                 name='add_dam',

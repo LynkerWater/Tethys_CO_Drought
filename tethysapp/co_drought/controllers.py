@@ -1073,6 +1073,770 @@ def drought_vuln_map(request):
 
     return render(request, 'co_drought/drought_vuln.html', context)
 ##################### End Drought Vulnerability Map #############################################
+############################## Drought Sectors Vulnerability Maps ############################################
+####### Agriculture ########
+@login_required()
+def drought_ag_risk_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.2, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.2},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+    
+    ##### WMS Layers - Ryan
+    usdm_legend = MVLegendImageClass(value='Drought Category',
+                             image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
+    usdm_current = MVLayer(
+            source='ImageWMS',
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':False,'opacity':0.25},
+            legend_title='USDM',
+            legend_classes=[usdm_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
+   
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+    
+    # Sector drought vulnerability county risk score maps -> from 2018 CO Drought Plan update
+    vuln_legend = MVLegendImageClass(value='Risk Score',
+                             image_url='/static/tethys_gizmos/data/ag_vuln_legend.jpg')
+    ag_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_Ag_vuln_score_2018.kml'},
+        layer_options={'visible':True,'opacity':0.75},
+        legend_title='Ag Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
+        
+    # Define GeoJSON layer
+    # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
+    with open(como_cocorahs) as f:
+        data = json.load(f)
+        
+    # the section below is grouping data by 'scalebar' drought condition
+    # this is a work around for displaying each drought report classification with a unique colored icon
+    data_sd = {}; data_md ={}; data_ml={}
+    data_sd[u'type'] = data['type']; data_md[u'type'] = data['type']; data_ml[u'type'] = data['type']
+    data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
+    for element in data['features']:
+        if 'Severely Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_sd[u'features'].append(element)
+        if 'Moderately Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_md[u'features'].append(element)
+        if 'Mildly Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_ml[u'features'].append(element)
+        
+    cocojson_sevdry = MVLayer(
+        source='GeoJSON',
+        options=data_sd,
+        legend_title='Condition Monitor',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_moddry = MVLayer(
+        source='GeoJSON',
+        options=data_md,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_mildry = MVLayer(
+        source='GeoJSON',
+        options=data_ml,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+        
+    # Define map view options
+    drought_ag_risk_map_view_options = MapView(
+            height='100%',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,ag_vuln_kml,usdm_current,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_ag_risk_map_view_options':drought_ag_risk_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_ag_risk.html', context)
+####### End Ag #######
+####### Engergy ########
+@login_required()
+def drought_eng_risk_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.2, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.2},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+    
+    ##### WMS Layers - Ryan
+    usdm_legend = MVLegendImageClass(value='Drought Category',
+                             image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
+    usdm_current = MVLayer(
+            source='ImageWMS',
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':False,'opacity':0.25},
+            legend_title='USDM',
+            legend_classes=[usdm_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
+   
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+    
+    # Sector drought vulnerability county risk score maps -> from 2018 CO Drought Plan update
+    energy_vuln_legend = MVLegendImageClass(value='Risk Score',
+                             image_url='/static/tethys_gizmos/data/energy_vuln_legend.jpg')
+    energy_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_Energy_vuln_score_2018.kml'},
+        layer_options={'visible':True,'opacity':0.75},
+        legend_title='Energy Risk Score',
+        feature_selection=True,
+        legend_classes=[energy_vuln_legend],
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
+        
+    # Define GeoJSON layer
+    # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
+    with open(como_cocorahs) as f:
+        data = json.load(f)
+        
+    # the section below is grouping data by 'scalebar' drought condition
+    # this is a work around for displaying each drought report classification with a unique colored icon
+    data_sd = {}; data_md ={}; data_ml={}
+    data_sd[u'type'] = data['type']; data_md[u'type'] = data['type']; data_ml[u'type'] = data['type']
+    data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
+    for element in data['features']:
+        if 'Severely Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_sd[u'features'].append(element)
+        if 'Moderately Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_md[u'features'].append(element)
+        if 'Mildly Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_ml[u'features'].append(element)
+        
+    cocojson_sevdry = MVLayer(
+        source='GeoJSON',
+        options=data_sd,
+        legend_title='Condition Monitor',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_moddry = MVLayer(
+        source='GeoJSON',
+        options=data_md,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_mildry = MVLayer(
+        source='GeoJSON',
+        options=data_ml,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+        
+    # Define map view options
+    drought_eng_risk_map_view_options = MapView(
+            height='100%',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,energy_vuln_kml,usdm_current,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_eng_risk_map_view_options':drought_eng_risk_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_eng_risk.html', context)
+####### End Engergy ######
+####### Environment ########
+@login_required()
+def drought_env_risk_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.2, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.2},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+    
+    ##### WMS Layers - Ryan
+    usdm_legend = MVLegendImageClass(value='Drought Category',
+                             image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
+    usdm_current = MVLayer(
+            source='ImageWMS',
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':False,'opacity':0.25},
+            legend_title='USDM',
+            legend_classes=[usdm_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
+   
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+    
+    # Sector drought vulnerability county risk score maps -> from 2018 CO Drought Plan update
+    vuln_legend = MVLegendImageClass(value='Risk Score',
+                             image_url='/static/tethys_gizmos/data/ag_vuln_legend.jpg')
+    environ_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_Environ_vuln_score_2018.kml'},
+        layer_options={'visible':True,'opacity':0.75},
+        legend_title='Environ Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
+        
+    # Define GeoJSON layer
+    # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
+    with open(como_cocorahs) as f:
+        data = json.load(f)
+        
+    # the section below is grouping data by 'scalebar' drought condition
+    # this is a work around for displaying each drought report classification with a unique colored icon
+    data_sd = {}; data_md ={}; data_ml={}
+    data_sd[u'type'] = data['type']; data_md[u'type'] = data['type']; data_ml[u'type'] = data['type']
+    data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
+    for element in data['features']:
+        if 'Severely Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_sd[u'features'].append(element)
+        if 'Moderately Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_md[u'features'].append(element)
+        if 'Mildly Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_ml[u'features'].append(element)
+        
+    cocojson_sevdry = MVLayer(
+        source='GeoJSON',
+        options=data_sd,
+        legend_title='Condition Monitor',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_moddry = MVLayer(
+        source='GeoJSON',
+        options=data_md,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_mildry = MVLayer(
+        source='GeoJSON',
+        options=data_ml,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+        
+    # Define map view options
+    drought_env_risk_map_view_options = MapView(
+            height='100%',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,environ_vuln_kml,usdm_current,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_env_risk_map_view_options':drought_env_risk_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_env_risk.html', context)
+####### End Environment #######
+####### Recreation ########
+@login_required()
+def drought_rec_risk_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.2, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.2},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+    
+    ##### WMS Layers - Ryan
+    usdm_legend = MVLegendImageClass(value='Drought Category',
+                             image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
+    usdm_current = MVLayer(
+            source='ImageWMS',
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':False,'opacity':0.25},
+            legend_title='USDM',
+            legend_classes=[usdm_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
+   
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+    
+    # Sector drought vulnerability county risk score maps -> from 2018 CO Drought Plan update
+    vuln_legend = MVLegendImageClass(value='Risk Score',
+                             image_url='/static/tethys_gizmos/data/ag_vuln_legend.jpg')
+    rec_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_Rec_vuln_score_2018.kml'},
+        layer_options={'visible':True,'opacity':0.75},
+        legend_title='Recreation Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
+        
+    # Define GeoJSON layer
+    # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
+    with open(como_cocorahs) as f:
+        data = json.load(f)
+        
+    # the section below is grouping data by 'scalebar' drought condition
+    # this is a work around for displaying each drought report classification with a unique colored icon
+    data_sd = {}; data_md ={}; data_ml={}
+    data_sd[u'type'] = data['type']; data_md[u'type'] = data['type']; data_ml[u'type'] = data['type']
+    data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
+    for element in data['features']:
+        if 'Severely Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_sd[u'features'].append(element)
+        if 'Moderately Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_md[u'features'].append(element)
+        if 'Mildly Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_ml[u'features'].append(element)
+        
+    cocojson_sevdry = MVLayer(
+        source='GeoJSON',
+        options=data_sd,
+        legend_title='Condition Monitor',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_moddry = MVLayer(
+        source='GeoJSON',
+        options=data_md,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_mildry = MVLayer(
+        source='GeoJSON',
+        options=data_ml,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+        
+    # Define map view options
+    drought_rec_risk_map_view_options = MapView(
+            height='100%',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,rec_vuln_kml,usdm_current,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_rec_risk_map_view_options':drought_rec_risk_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_rec_risk.html', context)
+####### End Recreation #######
+####### Socio Econ ########
+@login_required()
+def drought_soc_risk_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.2, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.2},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+    
+    ##### WMS Layers - Ryan
+    usdm_legend = MVLegendImageClass(value='Drought Category',
+                             image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
+    usdm_current = MVLayer(
+            source='ImageWMS',
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':False,'opacity':0.25},
+            legend_title='USDM',
+            legend_classes=[usdm_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
+   
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+    
+    # Sector drought vulnerability county risk score maps -> from 2018 CO Drought Plan update
+    vuln_legend = MVLegendImageClass(value='Risk Score',
+                             image_url='/static/tethys_gizmos/data/ag_vuln_legend.jpg')
+    socecon_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_SocEcon_vuln_score_2018.kml'},
+        layer_options={'visible':True,'opacity':0.75},
+        legend_title='Socioecon Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
+        
+    # Define GeoJSON layer
+    # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
+    with open(como_cocorahs) as f:
+        data = json.load(f)
+        
+    # the section below is grouping data by 'scalebar' drought condition
+    # this is a work around for displaying each drought report classification with a unique colored icon
+    data_sd = {}; data_md ={}; data_ml={}
+    data_sd[u'type'] = data['type']; data_md[u'type'] = data['type']; data_ml[u'type'] = data['type']
+    data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
+    for element in data['features']:
+        if 'Severely Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_sd[u'features'].append(element)
+        if 'Moderately Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_md[u'features'].append(element)
+        if 'Mildly Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_ml[u'features'].append(element)
+        
+    cocojson_sevdry = MVLayer(
+        source='GeoJSON',
+        options=data_sd,
+        legend_title='Condition Monitor',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_moddry = MVLayer(
+        source='GeoJSON',
+        options=data_md,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_mildry = MVLayer(
+        source='GeoJSON',
+        options=data_ml,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+        
+    # Define map view options
+    drought_soc_risk_map_view_options = MapView(
+            height='100%',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,socecon_vuln_kml,usdm_current,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_soc_risk_map_view_options':drought_soc_risk_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_soc_risk.html', context)
+####### End Socio Econ #######
+####### State Assets ########
+@login_required()
+def drought_state_risk_map(request):
+    """
+    Controller for the app drought map page.
+    """
+           
+    view_center = [-105.2, 39.0]
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=7.0,
+        maxZoom=12,
+        minZoom=5
+    )
+
+    # TIGER state/county mapserver
+    tiger_boundaries = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer'},
+        legend_title='States & Counties',
+        layer_options={'visible':True,'opacity':0.2},
+        legend_extent=[-112, 36.3, -98.5, 41.66])    
+    
+    ##### WMS Layers - Ryan
+    usdm_legend = MVLegendImageClass(value='Drought Category',
+                             image_url='http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?map=/ms4w/apps/usdm/service/usdm_current_wms.map&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=usdm_current&format=image/png&STYLE=default')
+    usdm_current = MVLayer(
+            source='ImageWMS',
+            options={'url': 'http://ndmc-001.unl.edu:8080/cgi-bin/mapserv.exe?',
+                     'params': {'LAYERS':'usdm_current','FORMAT':'image/png','VERSION':'1.1.1','STYLES':'default','MAP':'/ms4w/apps/usdm/service/usdm_current_wms.map'}},
+            layer_options={'visible':False,'opacity':0.25},
+            legend_title='USDM',
+            legend_classes=[usdm_legend],
+            legend_extent=[-126, 24.5, -66.2, 49])
+   
+    # USGS Rest server for HUC watersheds        
+    watersheds = MVLayer(
+        source='TileArcGISRest',
+        options={'url': 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer'},
+        legend_title='HUC Watersheds',
+        layer_options={'visible':False,'opacity':0.4},
+        legend_extent=[-112, 36.3, -98.5, 41.66])
+    
+    # Sector drought vulnerability county risk score maps -> from 2018 CO Drought Plan update
+    vuln_legend = MVLegendImageClass(value='Risk Score',
+                             image_url='/static/tethys_gizmos/data/ag_vuln_legend.jpg')
+    state_vuln_kml = MVLayer(
+        source='KML',
+        options={'url': '/static/tethys_gizmos/data/CO_StateAssets_vuln_score_2018.kml'},
+        layer_options={'visible':True,'opacity':0.75},
+        legend_title='State Assets Risk Score',
+        feature_selection=True,
+        legend_classes=[vuln_legend],
+        legend_extent=[-109.5, 36.5, -101.5, 41.6])
+        
+    # Define GeoJSON layer
+    # Data from CoCoRaHS Condition Monitoring: https://www.cocorahs.org/maps/conditionmonitoring/
+    with open(como_cocorahs) as f:
+        data = json.load(f)
+        
+    # the section below is grouping data by 'scalebar' drought condition
+    # this is a work around for displaying each drought report classification with a unique colored icon
+    data_sd = {}; data_md ={}; data_ml={}
+    data_sd[u'type'] = data['type']; data_md[u'type'] = data['type']; data_ml[u'type'] = data['type']
+    data_sd[u'features'] = [];data_md[u'features'] = [];data_ml[u'features'] = []
+    for element in data['features']:
+        if 'Severely Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_sd[u'features'].append(element)
+        if 'Moderately Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_md[u'features'].append(element)
+        if 'Mildly Dry' in element['properties']['scalebar']:
+            rdate = datetime.datetime.strptime(element['properties']['reportdate'][:10],"%Y-%m-%d")
+            if rdate >= week8:
+                data_ml[u'features'].append(element)
+        
+    cocojson_sevdry = MVLayer(
+        source='GeoJSON',
+        options=data_sd,
+        legend_title='Condition Monitor',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Severely Dry', fill='#67000d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#67000d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_moddry = MVLayer(
+        source='GeoJSON',
+        options=data_md,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Moderately Dry', fill='#a8190d')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#a8190d'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+    cocojson_mildry = MVLayer(
+        source='GeoJSON',
+        options=data_ml,
+        legend_title='',
+        legend_extent=[-112, 36.3, -98.5, 41.66],
+        feature_selection=False,
+        legend_classes=[MVLegendClass('point', 'Mildly Dry', fill='#f17d44')],
+        layer_options={'style': {'image': {'circle': {'radius': 6,'fill': {'color':  '#f17d44'},'stroke': {'color': '#ffffff', 'width': 1},}}}})
+
+        
+    # Define map view options
+    drought_state_risk_map_view_options = MapView(
+            height='100%',
+            width='100%',
+            controls=['ZoomSlider', 'Rotate', 'ScaleLine', 'FullScreen',
+                      {'MousePosition': {'projection': 'EPSG:4326'}},
+                      {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+            layers=[tiger_boundaries,cocojson_sevdry,cocojson_moddry,cocojson_mildry,state_vuln_kml,usdm_current,watersheds],
+            view=view_options,
+            basemap='OpenStreetMap',
+            legend=True
+        )
+
+    context = {
+        'drought_state_risk_map_view_options':drought_state_risk_map_view_options,
+    }
+
+    return render(request, 'co_drought/drought_state_risk.html', context)
+####### End State Assets #######
+##################### End Drought Sectors Vulnerability Maps #############################################
 ############################## Drought Monitor Main ############################################
 @login_required()
 def drought_monitor_map(request):
@@ -1234,7 +1998,7 @@ def drought_bokeh_plot(request):
     vuln_read = pd.read_csv(vuln_csv,sep=',',header=0,index_col='County')
     counties = vuln_read.index.tolist()
     vuln_dic = vuln_read.T.to_dict('list')
-    county = 'BOULDER'
+    county = 'Colorado (statewide avg)'
     sector_names = ['Recreation','Socio Econ','Environmental','Energy','State Assets','Ag']
     fill_color=['blue','green','yellow','orange','red','purple']    
     source = ColumnDataSource(data=dict(sectors=sector_names, vuln_risk=vuln_dic[county],fill_color=fill_color))
